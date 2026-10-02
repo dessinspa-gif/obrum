@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OBRUM · Licita tu obra con constructoras certificadas</title>
+<meta name="description" content="Marketplace que conecta clientes con constructoras certificadas. Publica tu proyecto con planos y EETT, recibe propuestas y adjudica.">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --ground: #eef2f5; --surface: #fff; --surface-2: #f6f9fb;
+  --line: #dbe3e9; --line-2: #c2ced7;
+  --ink: #1d2c33; --ink-2: #51656e; --ink-3: #8698a1;
+  --brand: #2c4149; --brand-dark: #16242a;
+  --accent: #b0685a; --accent-2: #8e4938; --accent-soft: #f8ebe7;
+  --ok: #2f6a55; --ok-soft: #e7f2ee;
+  --shadow: 0 1px 2px rgba(29,44,51,.05), 0 16px 36px -22px rgba(29,44,51,.32);
+  --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --display: "Archivo", var(--sans);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #141c21; --surface: #1d272d; --surface-2: #232f36;
+    --line: #2f3d45; --line-2: #415259;
+    --ink: #e8eef1; --ink-2: #a9bac3; --ink-3: #7f919a;
+    --brand: #e8eef1; --brand-dark: #cbd9e0;
+    --accent: #d08978; --accent-2: #e0a393; --accent-soft: #352623;
+    --ok: #74c0a5; --ok-soft: #1e302a;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 16px 36px -22px rgba(0,0,0,.85);
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--sans);
+  font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1060px; margin: 0 auto; padding-left: 22px; padding-right: 22px; }
+a { color: var(--accent-2); }
+h1,h2,h3 { font-family: var(--display); margin: 0; letter-spacing: -.02em; text-wrap: balance; }
+
+header { padding-block: 20px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.nav { display: flex; align-items: center; gap: 12px; }
+.marca { display: flex; align-items: center; gap: 11px; font-family: var(--display);
+  font-weight: 700; letter-spacing: .12em; color: var(--ink); text-decoration: none; font-size: 1.05rem; }
+.marca img { width: 30px; height: 30px; display: block; }
+.nav .sep { margin-left: auto; }
+
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 9px;
+  font-weight: 600; font-size: .95rem; text-decoration: none; border: 1px solid transparent;
+  background: var(--accent); color: #fff; }
+.btn:hover { background: var(--accent-2); }
+.btn.ghost { background: var(--surface); border-color: var(--line-2); color: var(--ink); }
+.btn.ghost:hover { background: var(--surface-2); }
+.btn.sm { padding: 8px 15px; font-size: .88rem; }
+
+.hero { padding-block: 64px 48px; }
+.eyebrow { display: inline-block; font-size: .74rem; font-weight: 600; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--accent-2); background: var(--accent-soft);
+  padding: 5px 13px; border-radius: 99px; margin-bottom: 18px; }
+.hero h1 { font-size: clamp(2rem, 5.5vw, 3.1rem); font-weight: 800; line-height: 1.08; max-width: 17ch; }
+.hero p { font-size: 1.1rem; color: var(--ink-2); max-width: 58ch; margin: 18px 0 0; }
+.acciones { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+
+.estado { display: flex; align-items: center; gap: 10px; margin-top: 30px; font-size: .9rem;
+  color: var(--ok); background: var(--ok-soft); border-radius: 9px; padding: 11px 15px;
+  border: 1px solid color-mix(in srgb, var(--ok) 22%, transparent); max-width: 60ch; }
+.punto { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex: none; }
+
+section { padding-block: 44px; }
+.titulo-sec { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+.sub-sec { color: var(--ink-2); margin: 0 0 26px; max-width: 60ch; }
+
+.dos { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.carta { background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: 26px; box-shadow: var(--shadow); }
+.carta h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 14px; }
+.carta .quien { font-size: .74rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent-2); margin-bottom: 10px; display: block; }
+.carta ol { margin: 0; padding-left: 20px; color: var(--ink-2); }
+.carta li { margin-bottom: 9px; }
+.carta li strong { color: var(--ink); font-weight: 600; }
+
+.docs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.doc { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+.doc b { font-family: var(--display); display: block; font-size: 1rem; margin-bottom: 5px; }
+.doc span { font-size: .9rem; color: var(--ink-2); }
+
+.cierre { background: var(--brand); color: #fff; border-radius: 16px; padding: 38px;
+  display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
+.cierre h2 { font-size: 1.6rem; font-weight: 700; color: #fff; max-width: 18ch; }
+.cierre p { margin: 8px 0 0; color: rgba(255,255,255,.78); max-width: 46ch; }
+.cierre .sep { margin-left: auto; }
+.cierre .btn { background: #fff; color: var(--brand-dark); }
+.cierre .btn:hover { background: #e8eef1; }
+
+footer { border-top: 1px solid var(--line); padding-block: 26px; color: var(--ink-3); font-size: .88rem;
+  margin-top: 44px; }
+
+@media (max-width: 760px) {
+  .dos, .docs { grid-template-columns: 1fr; }
+  .cierre { padding: 28px; }
+  .cierre .sep { margin-left: 0; width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="marca" href="/"><img src="logo.svg" alt=""> OBRUM</a>
+    <span class="sep"></span>
+    <a class="btn sm" href="demo.html">Ver la demo</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="hero">
+      <span class="eyebrow">Marketplace de licitaciones de obra</span>
+      <h1>Tu proyecto, licitado por constructoras certificadas.</h1>
+      <p>Publica tu obra con los planos, las especificaciones técnicas y los proyectos de
+        especialidades. Las constructoras certificadas revisan los antecedentes, descargan los
+        archivos y te envían su propuesta. Tú comparas montos, plazos y exclusiones, y adjudicas.</p>
+      <div class="acciones">
+        <a class="btn" href="demo.html">Probar la demo</a>
+        <a class="btn ghost" href="#constructoras">Soy constructora</a>
+      </div>
+      <div class="estado"><span class="punto"></span>
+        <span>En desarrollo. Estamos incorporando las primeras constructoras al registro.</span></div>
+    </section>
+
+    <section>
+      <h2 class="titulo-sec">Cómo funciona</h2>
+      <p class="sub-sec">Dos lados, un mismo expediente: el que publica la obra y el que la cotiza
+        trabajan sobre los mismos documentos.</p>
+      <div class="dos">
+        <div class="carta">
+          <span class="quien">Si tienes una obra</span>
+          <h3>Publicas y recibes propuestas</h3>
+          <ol>
+            <li><strong>Creas el proyecto</strong> con ubicación, superficie, plazo, modalidad de
+              contrato y presupuesto referencial.</li>
+            <li><strong>Declaras qué documentación tienes</strong>: planos de arquitectura, EETT y
+              especialidades.</li>
+            <li><strong>Subes los archivos</strong> por categoría, para que todas coticen sobre lo mismo.</li>
+            <li><strong>Publicas la licitación</strong> con fecha de cierre.</li>
+            <li><strong>Comparas y adjudicas</strong> montos, plazos, formas de pago y exclusiones.</li>
+          </ol>
+        </div>
+        <div class="carta" id="constructoras">
+          <span class="quien">Si eres constructora</span>
+          <h3>Exploras, descargas y licitas</h3>
+          <ol>
+            <li><strong>Te registras</strong> con tu razón social, experiencia, rubros y regiones.</li>
+            <li><strong>Te certificamos</strong>: validamos tus antecedentes antes de darte acceso.</li>
+            <li><strong>Exploras licitaciones</strong> filtrando por tipo de obra, región y documentación
+              disponible.</li>
+            <li><strong>Descargas planos y EETT</strong> desde la ficha de cada proyecto.</li>
+            <li><strong>Envías tu propuesta</strong> con monto, plazo, validez y adjuntos.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="titulo-sec">El expediente, ordenado</h2>
+      <p class="sub-sec">Cada proyecto declara con qué antecedentes cuenta. Es lo primero que mira
+        una constructora para decidir si puede cotizar.</p>
+      <div class="docs">
+        <div class="doc"><b>Planos de arquitectura</b>
+          <span>Plantas, cortes, elevaciones y emplazamiento.</span></div>
+        <div class="doc"><b>Especificaciones técnicas</b>
+          <span>Partidas, materiales y estándares de terminación.</span></div>
+        <div class="doc"><b>Especialidades</b>
+          <span>Cálculo, eléctrico, sanitario, clima, gas e incendio.</span></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="cierre">
+        <div>
+          <h2>Mira la plataforma funcionando</h2>
+          <p>Una demostración navegable: crea un proyecto, cámbiate a constructora, envía una
+            propuesta y adjudícala. Todo ocurre en tu navegador.</p>
+        </div>
+        <span class="sep"></span>
+        <a class="btn" href="demo.html">Abrir la demo</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">OBRUM · Marketplace de licitaciones de obra · Chile</div>
+</footer>
+
+</body>
+</html>

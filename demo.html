@@ -1,0 +1,2444 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo de OBRUM</title>
+<style>
+/* OBRUM — sistema visual */
+:root {
+  /* Paleta derivada del logo OBRUM: terracota, pizarra y azul grisáceo */
+  --bg: #eef2f5;
+  --surface: #ffffff;
+  --surface-2: #f6f9fb;
+  --line: #dde5ea;
+  --line-strong: #c4d0d8;
+  --ink: #1d2c33;
+  --ink-2: #51656e;
+  --ink-3: #82949d;
+  --brand: #2c4149;          /* pizarra del logotipo */
+  --brand-dark: #1b2c33;
+  --brand-soft: #e6ecf0;
+  --accent: #b0685a;         /* terracota del isotipo */
+  --accent-dark: #8e4938;
+  --accent-soft: #f8ebe7;
+  --ok: #2f6a55;
+  --ok-soft: #e7f2ee;
+  --warn: #8f6413;
+  --warn-soft: #fbf1dc;
+  --danger: #b3261e;
+  --danger-soft: #fdeeec;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 2px rgba(29, 44, 51, .06), 0 8px 24px -12px rgba(29, 44, 51, .2);
+  --shadow-lg: 0 24px 48px -24px rgba(29, 44, 51, .4);
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent-dark); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1, h2, h3, h4 { margin: 0 0 .5rem; line-height: 1.25; letter-spacing: -.015em; }
+h1 { font-size: 1.9rem; }
+h2 { font-size: 1.35rem; }
+h3 { font-size: 1.05rem; }
+p { margin: 0 0 .75rem; }
+small, .small { font-size: .82rem; }
+.muted { color: var(--ink-2); }
+.dim { color: var(--ink-3); }
+.mono { font-variant-numeric: tabular-nums; }
+.center { text-align: center; }
+.nowrap { white-space: nowrap; }
+.hidden { display: none !important; }
+
+/* ---------------------------------------------------------- layout */
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+.narrow { max-width: 760px; }
+main { padding: 28px 0 72px; min-height: 60vh; }
+
+header.top {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(255, 255, 255, .92);
+  backdrop-filter: saturate(160%) blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.top-inner { display: flex; align-items: center; gap: 18px; height: 62px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--ink);
+  font-size: 1.05rem; letter-spacing: .08em; }
+.brand:hover { text-decoration: none; }
+.brand-mark { width: 28px; height: 28px; display: block; flex: none; }
+.brand .wordmark { letter-spacing: .12em; }
+nav.main { display: flex; gap: 4px; margin-left: auto; align-items: center; flex-wrap: wrap; }
+nav.main a {
+  padding: 7px 12px; border-radius: 8px; color: var(--ink-2); font-weight: 550; font-size: .92rem;
+}
+nav.main a:hover { background: var(--surface-2); color: var(--ink); text-decoration: none; }
+nav.main a.active { background: var(--brand-soft); color: var(--brand-dark); }
+.nav-user { display: flex; align-items: center; gap: 10px; padding-left: 10px; border-left: 1px solid var(--line); }
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--brand-soft); color: var(--brand-dark); font-weight: 700; font-size: .8rem;
+}
+.bell { position: relative; padding: 7px 10px; border-radius: 8px; color: var(--ink-2); }
+.bell .dot {
+  position: absolute; top: 2px; right: 3px; min-width: 16px; height: 16px; padding: 0 4px;
+  border-radius: 9px; background: var(--danger); color: #fff; font-size: .66rem; font-weight: 700;
+  display: grid; place-items: center;
+}
+
+/* ---------------------------------------------------------- pieces */
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 20px;
+}
+.card + .card { margin-top: 16px; }
+.card-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.card-head h2, .card-head h3 { margin: 0; }
+.card-head .spacer { margin-left: auto; }
+.grid { display: grid; gap: 16px; }
+.grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.row.end { justify-content: flex-end; }
+.stack { display: flex; flex-direction: column; gap: 14px; }
+.sep { height: 1px; background: var(--line); margin: 16px 0; border: 0; }
+
+.page-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.page-head .spacer { margin-left: auto; }
+.page-head p { margin: 4px 0 0; color: var(--ink-2); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 9px 16px; border-radius: var(--radius-sm); border: 1px solid transparent;
+  background: var(--brand); color: #fff; font: inherit; font-weight: 600; font-size: .92rem;
+  cursor: pointer; transition: background .15s, border-color .15s, opacity .15s;
+  text-decoration: none; white-space: nowrap;
+}
+.btn:hover { background: var(--brand-dark); text-decoration: none; color: #fff; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn.ghost { background: var(--surface); border-color: var(--line-strong); color: var(--ink); }
+.btn.ghost:hover { background: var(--surface-2); color: var(--ink); }
+.btn.subtle { background: var(--brand-soft); color: var(--brand-dark); }
+.btn.subtle:hover { background: #dae3e9; }
+.btn.accent { background: var(--accent); }
+.btn.accent:hover { background: var(--accent-dark); }
+.btn.ok { background: var(--ok); }
+.btn.ok:hover { background: #245344; }
+.btn.danger { background: var(--surface); border-color: #f2cdca; color: var(--danger); }
+.btn.danger:hover { background: var(--danger-soft); color: var(--danger); }
+.btn.sm { padding: 6px 11px; font-size: .84rem; }
+.btn.lg { padding: 12px 22px; font-size: 1rem; }
+.btn.block { width: 100%; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 99px;
+  font-size: .75rem; font-weight: 650; letter-spacing: .01em; border: 1px solid transparent;
+  white-space: nowrap;
+}
+.badge.gray { background: var(--surface-2); color: var(--ink-2); border-color: var(--line); }
+.badge.blue { background: var(--brand-soft); color: var(--brand-dark); border-color: #d5dfe5; }
+.badge.green { background: var(--ok-soft); color: var(--ok); border-color: #c5e1d7; }
+.badge.amber { background: var(--warn-soft); color: var(--warn); border-color: #eedcb4; }
+.badge.accent { background: var(--accent-soft); color: var(--accent-dark); border-color: #eed8d1; }
+.badge.red { background: var(--danger-soft); color: var(--danger); border-color: #f2cdca; }
+
+/* ---------------------------------------------------------- forms */
+label.field { display: block; margin-bottom: 14px; }
+label.field > span.lbl {
+  display: block; font-size: .83rem; font-weight: 600; color: var(--ink-2); margin-bottom: 5px;
+}
+input[type=text], input[type=email], input[type=password], input[type=number], input[type=date],
+input[type=url], input[type=tel], select, textarea {
+  width: 100%; padding: 9px 11px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+  font: inherit; font-size: .93rem; background: var(--surface); color: var(--ink);
+  transition: border-color .15s, box-shadow .15s;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(44, 65, 73, .14);
+}
+textarea { min-height: 96px; resize: vertical; line-height: 1.5; }
+select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%2351656e' stroke-width='1.6' stroke-linecap='round'/></svg>");
+  background-repeat: no-repeat; background-position: right 11px center; padding-right: 30px; }
+.hint { font-size: .78rem; color: var(--ink-3); margin-top: 4px; }
+fieldset { border: 0; padding: 0; margin: 0 0 8px; }
+legend { font-size: .83rem; font-weight: 700; color: var(--ink); margin-bottom: 8px; padding: 0; }
+
+.check { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 8px; cursor: pointer; font-size: .92rem; }
+.check input { margin: 3px 0 0; width: 16px; height: 16px; accent-color: var(--brand); flex: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 99px;
+  border: 1px solid var(--line-strong); background: var(--surface); cursor: pointer; font-size: .85rem;
+  user-select: none;
+}
+.chip input { display: none; }
+.chip.on { background: var(--brand-soft); border-color: var(--brand); color: var(--brand-dark); font-weight: 600; }
+
+.seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
+.seg button {
+  border: 0; background: transparent; font: inherit; font-size: .88rem; font-weight: 600;
+  color: var(--ink-2); padding: 7px 14px; border-radius: 7px; cursor: pointer;
+}
+.seg button.on { background: var(--surface); color: var(--brand-dark); box-shadow: var(--shadow); }
+
+.role-pick { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+.role-card {
+  border: 1.5px solid var(--line-strong); border-radius: var(--radius); padding: 16px; cursor: pointer;
+  background: var(--surface); transition: border-color .15s, background .15s;
+}
+.role-card:hover { border-color: var(--brand); }
+.role-card.on { border-color: var(--brand); background: var(--brand-soft); }
+.role-card strong { display: block; margin-bottom: 3px; }
+.role-card span { font-size: .84rem; color: var(--ink-2); }
+
+/* ---------------------------------------------------------- tables */
+table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+th, td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { font-size: .76rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-3); font-weight: 700; background: var(--surface-2); }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr:hover { background: var(--surface-2); }
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+tr.best td { background: #eef6f2; }
+tr.best:hover td { background: #e5f0ea; }
+
+/* ---------------------------------------------------------- listings */
+.project-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 18px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 10px;
+  transition: border-color .15s, transform .15s;
+}
+.project-card:hover { border-color: var(--line-strong); transform: translateY(-1px); }
+.project-card h3 { margin: 0; font-size: 1.02rem; }
+.project-card .meta { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .84rem; color: var(--ink-2); }
+.project-card .desc {
+  font-size: .89rem; color: var(--ink-2); display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden; margin: 0;
+}
+.project-card footer { display: flex; align-items: center; gap: 10px; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--line); }
+.kv { display: grid; grid-template-columns: 170px 1fr; gap: 6px 16px; font-size: .92rem; }
+.kv dt { color: var(--ink-3); font-size: .84rem; }
+.kv dd { margin: 0; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+.stat b { display: block; font-size: 1.65rem; line-height: 1.1; letter-spacing: -.02em; }
+.stat span { font-size: .82rem; color: var(--ink-2); }
+
+.file-row {
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--line);
+  border-radius: var(--radius-sm); background: var(--surface); margin-bottom: 8px;
+}
+.file-row .ficon {
+  width: 32px; height: 32px; border-radius: 7px; background: var(--brand-soft); color: var(--brand-dark);
+  display: grid; place-items: center; font-size: .66rem; font-weight: 800; flex: none;
+}
+.file-row .fname { font-weight: 550; font-size: .9rem; word-break: break-word; }
+.file-row .fmeta { font-size: .77rem; color: var(--ink-3); }
+.file-row .spacer { margin-left: auto; }
+.drop {
+  border: 1.5px dashed var(--line-strong); border-radius: var(--radius); padding: 18px;
+  text-align: center; background: var(--surface-2); cursor: pointer; transition: border-color .15s, background .15s;
+}
+.drop:hover, .drop.over { border-color: var(--brand); background: var(--brand-soft); }
+.drop input { display: none; }
+
+.empty { text-align: center; padding: 44px 20px; color: var(--ink-2); }
+.empty .ico { font-size: 2rem; display: block; margin-bottom: 8px; opacity: .55; }
+
+.notice {
+  border-radius: var(--radius); padding: 14px 16px; border: 1px solid var(--line);
+  background: var(--surface-2); font-size: .9rem; display: flex; gap: 12px; align-items: flex-start;
+}
+.notice.info { background: var(--brand-soft); border-color: #d5dfe5; color: var(--brand-dark); }
+.notice.warn { background: var(--warn-soft); border-color: #eedcb4; color: #6d4c10; }
+.notice.ok { background: var(--ok-soft); border-color: #c5e1d7; color: var(--ok); }
+.notice.err { background: var(--danger-soft); border-color: #f2cdca; color: var(--danger); }
+.notice .spacer { margin-left: auto; }
+
+/* ---------------------------------------------------------- landing */
+.hero { padding: 56px 0 40px; }
+.hero h1 { font-size: 2.6rem; max-width: 18ch; letter-spacing: -.03em; }
+.hero p.lede { font-size: 1.1rem; color: var(--ink-2); max-width: 58ch; }
+.hero .cta { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px; font-size: .78rem; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--accent-dark);
+  background: var(--accent-soft); padding: 5px 12px; border-radius: 99px; margin-bottom: 14px;
+}
+.how { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.how .card ol { margin: 0; padding-left: 20px; }
+.how .card li { margin-bottom: 7px; color: var(--ink-2); }
+.how .card li strong { color: var(--ink); }
+.demo-box { font-size: .86rem; }
+.demo-box code { background: var(--surface-2); border: 1px solid var(--line); padding: 1px 6px; border-radius: 5px; font-size: .84em; }
+
+/* ---------------------------------------------------------- toast/modal */
+#toasts { position: fixed; right: 18px; bottom: 18px; z-index: 90; display: flex; flex-direction: column; gap: 9px; }
+.toast {
+  background: var(--ink); color: #fff; padding: 11px 16px; border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg); font-size: .9rem; max-width: 380px; animation: slideIn .18s ease-out;
+}
+.toast.err { background: var(--danger); }
+.toast.ok { background: var(--ok); }
+@keyframes slideIn { from { opacity: 0; transform: translateY(8px); } }
+
+.modal-bg {
+  position: fixed; inset: 0; background: rgba(29, 44, 51, .45); z-index: 80; display: grid;
+  place-items: center; padding: 20px; animation: fade .15s;
+}
+@keyframes fade { from { opacity: 0; } }
+.modal {
+  background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow-lg);
+  width: min(560px, 100%); max-height: 88vh; overflow: auto; padding: 22px;
+}
+.spinner {
+  width: 18px; height: 18px; border: 2px solid rgba(255, 255, 255, .35); border-top-color: #fff;
+  border-radius: 50%; animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading { padding: 60px; text-align: center; color: var(--ink-3); }
+
+footer.site { border-top: 1px solid var(--line); padding: 22px 0; color: var(--ink-3); font-size: .84rem; }
+
+@media (max-width: 860px) {
+  .grid.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid.three, .grid.two, .how { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2rem; }
+  .kv { grid-template-columns: 1fr; gap: 2px 0; }
+  .kv dd { margin-bottom: 8px; }
+  .top-inner { height: auto; padding: 10px 0; flex-wrap: wrap; }
+  nav.main { width: 100%; margin-left: 0; }
+  .role-pick { grid-template-columns: 1fr; }
+}
+
+/* Botones dentro del nav: no deben heredar el color de los enlaces del nav */
+nav.main a.btn { color: #fff; }
+nav.main a.btn:hover { background: var(--brand-dark); color: #fff; }
+nav.main a.btn.ghost { color: var(--ink); }
+nav.main a.btn.ghost:hover { background: var(--surface-2); color: var(--ink); }
+
+
+/* ---- barra de la demo (solo existe en el archivo de demostración) ---- */
+#demo-bar {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: var(--ink); color: #fff; padding: 9px 20px; font-size: .84rem;
+}
+#demo-bar b { letter-spacing: .04em; }
+#demo-bar .sep { margin-left: auto; }
+#demo-bar button {
+  font: inherit; font-weight: 600; font-size: .82rem; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.1); color: #fff;
+  padding: 4px 11px; border-radius: 99px;
+}
+#demo-bar button:hover { background: rgba(255,255,255,.22); }
+#demo-bar button.reset { border-color: transparent; background: transparent; text-decoration: underline; }
+@media (max-width: 700px) { #demo-bar .sep { margin-left: 0; width: 100%; height: 0; } }
+
+</style>
+
+<div id="demo-bar">
+  <b>DEMO DE OBRUM</b>
+  <span>Todo ocurre dentro de tu navegador: ningún dato sale de tu equipo.</span>
+  <span class="sep"></span>
+  <span>Entrar como:</span>
+  <button data-demo="cliente">Cliente</button>
+  <button data-demo="constructora">Constructora</button>
+  <button data-demo="admin">Administrador</button>
+  <button class="reset" data-demo="reset">Reiniciar</button>
+</div>
+
+<header class="top">
+  <div class="wrap top-inner">
+    <a class="brand" href="#/" aria-label="OBRUM, ir al inicio">
+      <img class="brand-mark" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20role%3D%22img%22%20aria-label%3D%22OBRUM%22%3E%0A%20%20%3Ctitle%3EOBRUM%3C%2Ftitle%3E%0A%20%20%3Cpath%20fill%3D%22%23b0685a%22%20fill-rule%3D%22evenodd%22%20stroke%3D%22%23b0685a%22%20stroke-width%3D%223.2%22%20stroke-linejoin%3D%22round%22%0A%20%20%20%20%20%20%20%20d%3D%22M50%206%20L80%2017%20L95%2044%20L88%2074%20L60%2093%20L30%2086%20L9%2060%20L16%2025%20Z%0A%20%20%20%20%20%20%20%20%20%20%20M55%2023%20L75%2030%20L83%2049%20L77%2069%20L58%2077%20L37%2071%20L27%2053%20L33%2030%20Z%22%2F%3E%0A%3C%2Fsvg%3E%0A" alt="">
+      <span class="wordmark">OBRUM</span></a>
+    <nav class="main" id="nav"></nav>
+  </div>
+</header>
+<main><div class="wrap" id="app"><div class="loading">Cargando…</div></div></main>
+<footer class="site"><div class="wrap">
+  OBRUM · Marketplace de licitaciones de obra · Demostración navegable
+</div></footer>
+<div id="toasts"></div>
+<div id="modal-root"></div>
+
+<script>
+/* OBRUM — backend simulado para la demo en un solo archivo.
+   Reemplaza al servidor: los datos viven en el navegador de quien abre la página. */
+'use strict';
+
+const DEMO_KEY = 'obrum-demo-v1';
+const memFiles = new Map();          // id -> {texto} | {url, mime}
+let D = null;
+
+/* ---------------------------------------------------------- utilidades */
+function nid() {
+  if (crypto.randomUUID) return crypto.randomUUID().replace(/-/g, '');
+  let s = ''; for (let i = 0; i < 32; i++) s += '0123456789abcdef'[Math.floor(Math.random() * 16)];
+  return s;
+}
+function ahora() { return new Date().toISOString().replace(/\.\d+Z$/, 'Z'); }
+function enDias(n) {
+  const d = new Date(Date.now() + n * 86400000);
+  return d.toISOString().slice(0, 10);
+}
+function fallo(status, mensaje, extra) {
+  const e = new Error(mensaje);
+  e.status = status; e.data = Object.assign({ error: mensaje }, extra || {});
+  throw e;
+}
+function guardar() {
+  try { localStorage.setItem(DEMO_KEY, JSON.stringify(D)); } catch (e) { /* cupo lleno */ }
+}
+
+/* ---------------------------------------------------------- datos iniciales */
+function sembrar() {
+  const admin = nid(), cliente = nid(), andes = nid(), sur = nid();
+  const p1 = nid(), p2 = nid(), pr1 = nid();
+  const f = (pid, cat, nombre, texto) => {
+    const fid = nid();
+    memFiles.set(fid, { texto: texto });
+    return { id: fid, project_id: pid, proposal_id: null, owner_id: cliente, categoria: cat,
+             nombre: nombre, mime: 'text/plain', size: texto.length, created_at: ahora() };
+  };
+  return {
+    sesion: null,
+    users: [
+      { id: admin, role: 'admin', email: 'admin@obrum.cl', clave: 'demo1234',
+        nombre: 'Equipo OBRUM', telefono: '+56 2 2345 6789', created_at: ahora() },
+      { id: cliente, role: 'cliente', email: 'cliente@demo.cl', clave: 'demo1234',
+        nombre: 'María Fuentes', telefono: '+56 9 8877 6655', created_at: ahora(),
+        perfil: { tipo: 'empresa', rut: '76.543.210-8', empresa: 'Inmobiliaria Los Aromos' } },
+      { id: andes, role: 'constructora', email: 'constructora@demo.cl', clave: 'demo1234',
+        nombre: 'Jorge Ramírez', telefono: '+56 9 5544 3322', created_at: ahora(),
+        perfil: { razon_social: 'Constructora Andes Ltda.', rut: '77.111.222-3',
+                  anos_experiencia: 14,
+                  especialidades: ['Obra gruesa', 'Terminaciones', 'Instalaciones sanitarias'],
+                  regiones: ['Metropolitana', 'Valparaíso'], sitio_web: 'https://andes.cl',
+                  descripcion: 'Empresa con 14 años de experiencia en vivienda y edificios de mediana altura.',
+                  registro_mop: 'Registro MOP 1ª categoría', cert_estado: 'certificada',
+                  cert_notas: null } },
+      { id: sur, role: 'constructora', email: 'pendiente@demo.cl', clave: 'demo1234',
+        nombre: 'Carla Soto', telefono: '+56 9 1122 3344', created_at: ahora(),
+        perfil: { razon_social: 'Constructora Sur Austral SpA', rut: '78.222.333-4',
+                  anos_experiencia: 5, especialidades: ['Obra civil', 'Movimiento de tierras'],
+                  regiones: ['Los Lagos'], sitio_web: null,
+                  descripcion: 'Especialistas en obra civil en la zona sur.',
+                  registro_mop: null, cert_estado: 'pendiente', cert_notas: null } }
+    ],
+    projects: [
+      { id: p1, cliente_id: cliente, titulo: 'Edificio habitacional 4 pisos - Ñuñoa',
+        descripcion: 'Construcción de edificio habitacional de 4 pisos con 16 departamentos, ' +
+          'estacionamientos en superficie y áreas comunes. Se cuenta con permiso de edificación aprobado.',
+        tipo_obra: 'Edificio', region: 'Metropolitana', comuna: 'Ñuñoa',
+        direccion: 'Av. Irarrázaval 3450', superficie_m2: 1850, presupuesto: 32000, moneda: 'UF',
+        plazo_dias: 420, fecha_inicio: enDias(60), fecha_cierre: enDias(21),
+        modalidad: 'Suma alzada', doc_planos: 'si', doc_eett: 'si', doc_especialidades: 'parcial',
+        especialidades: ['Cálculo estructural', 'Instalaciones eléctricas',
+                         'Instalaciones sanitarias', 'Climatización'],
+        estado: 'publicado', created_at: ahora(), published_at: ahora(), adjudicada_id: null },
+      { id: p2, cliente_id: cliente, titulo: 'Remodelación oficinas corporativas - Providencia',
+        descripcion: 'Habilitación de 620 m² de oficinas: tabiquería, cielos, climatización y terminaciones.',
+        tipo_obra: 'Remodelación', region: 'Metropolitana', comuna: 'Providencia',
+        direccion: 'Nueva Providencia 1881', superficie_m2: 620, presupuesto: 9500, moneda: 'UF',
+        plazo_dias: 120, fecha_inicio: null, fecha_cierre: enDias(30),
+        modalidad: 'Serie de precios unitarios', doc_planos: 'parcial', doc_eett: 'no',
+        doc_especialidades: 'no', especialidades: ['Climatización', 'Instalaciones eléctricas'],
+        estado: 'borrador', created_at: ahora(), published_at: null, adjudicada_id: null }
+    ],
+    files: [
+      f(p1, 'planos', 'planos-arquitectura-ARQ-01.txt',
+        'SET DE PLANOS DE ARQUITECTURA (ejemplo de la demo)\n\nLámina ARQ-01  Planta primer piso\n' +
+        'Lámina ARQ-02  Planta tipo\nLámina ARQ-03  Cortes y elevaciones\n\n' +
+        'En la plataforma real aquí va el PDF o DWG que sube el cliente.'),
+      f(p1, 'eett', 'especificaciones-tecnicas.txt',
+        'ESPECIFICACIONES TÉCNICAS (ejemplo de la demo)\n\n1. Obra gruesa\n   1.1 Fundaciones: hormigón G25\n' +
+        '   1.2 Estructura: hormigón armado\n2. Terminaciones\n   2.1 Pavimentos: porcelanato 60x60\n' +
+        '   2.2 Muros: pintura látex lavable'),
+      f(p1, 'especialidades', 'calculo-estructural-E01.txt',
+        'MEMORIA DE CÁLCULO ESTRUCTURAL (ejemplo de la demo)\n\nNorma NCh433 Of.96 Mod.2009\n' +
+        'Zona sísmica 2, suelo tipo C.')
+    ],
+    proposals: [
+      { id: pr1, project_id: p1, constructora_id: andes, monto: 30850, moneda: 'UF',
+        incluye_iva: 1, plazo_dias: 400, validez_dias: 45,
+        forma_pago: 'Anticipo 15%, estados de pago mensuales contra avance, retención 10%.',
+        exclusiones: 'No incluye urbanización exterior ni aportes de empalme eléctrico definitivo.',
+        observaciones: 'Propuesta basada en los planos ARQ-01 y las EETT publicadas. ' +
+          'Disponibilidad inmediata de equipo de obra.',
+        estado: 'enviada', created_at: ahora(), updated_at: null }
+    ],
+    events: [
+      { id: nid(), user_id: cliente, project_id: p1, tipo: 'nueva_propuesta',
+        mensaje: 'Constructora Andes Ltda. envió una propuesta para «Edificio habitacional 4 pisos - Ñuñoa».',
+        leido: 0, created_at: ahora() }
+    ]
+  };
+}
+
+function cargar() {
+  try {
+    const crudo = localStorage.getItem(DEMO_KEY);
+    if (crudo) {
+      const d = JSON.parse(crudo);
+      if (d && d.users && d.projects) {
+        sembrarArchivosDemo(d);
+        return d;
+      }
+    }
+  } catch (e) { /* datos corruptos: se siembra de nuevo */ }
+  return sembrar();
+}
+
+// Los archivos de ejemplo se regeneran en cada carga (no se guardan en el navegador).
+function sembrarArchivosDemo(d) {
+  const textos = {
+    'planos-arquitectura-ARQ-01.txt': 'SET DE PLANOS DE ARQUITECTURA (ejemplo de la demo)\n\n' +
+      'Lámina ARQ-01  Planta primer piso\nLámina ARQ-02  Planta tipo\nLámina ARQ-03  Cortes y elevaciones',
+    'especificaciones-tecnicas.txt': 'ESPECIFICACIONES TÉCNICAS (ejemplo de la demo)\n\n' +
+      '1. Obra gruesa\n2. Terminaciones',
+    'calculo-estructural-E01.txt': 'MEMORIA DE CÁLCULO ESTRUCTURAL (ejemplo de la demo)\n\nNorma NCh433.'
+  };
+  (d.files || []).forEach(f => {
+    if (!memFiles.has(f.id) && textos[f.nombre]) memFiles.set(f.id, { texto: textos[f.nombre] });
+  });
+}
+
+function reiniciarDemo() {
+  try { localStorage.removeItem(DEMO_KEY); } catch (e) { /* nada */ }
+  memFiles.clear();
+  location.hash = '#/';
+  location.reload();
+}
+
+/* ---------------------------------------------------------- permisos */
+function actual() { return D.users.find(u => u.id === D.sesion) || null; }
+function requerir() {
+  const roles = Array.from(arguments);
+  const u = actual();
+  if (!u) fallo(401, 'Debes iniciar sesión.');
+  if (roles.length && roles.indexOf(u.role) === -1) fallo(403, 'No tienes permisos para esta acción.');
+  return u;
+}
+function certificada(u) {
+  const p = u.perfil || {};
+  if (p.cert_estado !== 'certificada') {
+    fallo(403, 'Tu empresa debe estar certificada para acceder a las licitaciones.',
+          { cert_estado: p.cert_estado || 'pendiente' });
+  }
+  return p;
+}
+function avisar(userId, tipo, mensaje, projectId) {
+  D.events.unshift({ id: nid(), user_id: userId, project_id: projectId || null, tipo: tipo,
+                     mensaje: mensaje, leido: 0, created_at: ahora() });
+}
+
+/* ---------------------------------------------------------- serialización */
+function usuarioPublico(u) {
+  if (!u) return null;
+  return { id: u.id, role: u.role, email: u.email, nombre: u.nombre, telefono: u.telefono,
+           perfil: u.perfil ? JSON.parse(JSON.stringify(u.perfil)) : {} };
+}
+function archivoFila(f) {
+  return { id: f.id, nombre: f.nombre, categoria: f.categoria, size: f.size, mime: f.mime,
+           created_at: f.created_at };
+}
+function proyectoFila(p, viewer, conArchivos) {
+  const out = Object.assign({}, p);
+  out.propuestas_count = D.proposals.filter(x => x.project_id === p.id && x.estado !== 'retirada').length;
+  const due = D.users.find(u => u.id === p.cliente_id) || {};
+  const esDueno = !!(viewer && viewer.id === p.cliente_id);
+  const esAdmin = !!(viewer && viewer.role === 'admin');
+  out.cliente = {
+    nombre: (due.perfil && due.perfil.empresa) || due.nombre || 'Cliente',
+    contacto: (esDueno || esAdmin) ? due.nombre : null,
+    email: (esDueno || esAdmin) ? due.email : null
+  };
+  if (conArchivos !== false) {
+    out.archivos = D.files.filter(f => f.project_id === p.id && !f.proposal_id).map(archivoFila);
+  }
+  if (viewer && viewer.role === 'constructora') {
+    const mia = D.proposals.find(x => x.project_id === p.id && x.constructora_id === viewer.id);
+    out.mi_propuesta = mia ? propuestaFila(mia, viewer) : null;
+  }
+  out.es_dueno = esDueno;
+  return out;
+}
+function propuestaFila(pr, viewer) {
+  const out = Object.assign({}, pr);
+  out.incluye_iva = !!pr.incluye_iva;
+  const emp = D.users.find(u => u.id === pr.constructora_id) || {};
+  const perfil = emp.perfil || {};
+  const proy = D.projects.find(p => p.id === pr.project_id);
+  const veContacto = !!(viewer && (viewer.id === pr.constructora_id || viewer.role === 'admin' ||
+                        (proy && proy.cliente_id === viewer.id)));
+  out.constructora = {
+    id: pr.constructora_id, razon_social: perfil.razon_social || emp.nombre,
+    anos_experiencia: perfil.anos_experiencia, especialidades: perfil.especialidades || [],
+    cert_estado: perfil.cert_estado, sitio_web: perfil.sitio_web, descripcion: perfil.descripcion,
+    contacto: veContacto ? emp.nombre : null, email: veContacto ? emp.email : null,
+    telefono: veContacto ? emp.telefono : null
+  };
+  out.proyecto = proy ? { id: proy.id, titulo: proy.titulo, estado: proy.estado, moneda: proy.moneda } : null;
+  out.archivos = D.files.filter(f => f.proposal_id === pr.id).map(archivoFila);
+  return out;
+}
+
+/* ---------------------------------------------------------- helpers de campos */
+function aNumero(v) {
+  if (v === '' || v === null || v === undefined) return null;
+  const n = Number(String(v).replace(',', '.'));
+  return isNaN(n) ? null : n;
+}
+function limpiar(v, max) { return v === null || v === undefined ? null : String(v).trim().slice(0, max || 4000) || null; }
+function camposProyecto(d, base) {
+  base = base || {};
+  const doc = k => ['si', 'parcial', 'no'].indexOf(d[k]) >= 0 ? d[k] : (base[k] || 'no');
+  return {
+    titulo: limpiar(d.titulo !== undefined ? d.titulo : base.titulo, 160),
+    descripcion: limpiar(d.descripcion !== undefined ? d.descripcion : base.descripcion, 8000),
+    tipo_obra: limpiar(d.tipo_obra !== undefined ? d.tipo_obra : base.tipo_obra, 60),
+    region: limpiar(d.region !== undefined ? d.region : base.region, 80),
+    comuna: limpiar(d.comuna !== undefined ? d.comuna : base.comuna, 80),
+    direccion: limpiar(d.direccion !== undefined ? d.direccion : base.direccion, 200),
+    superficie_m2: aNumero(d.superficie_m2 !== undefined ? d.superficie_m2 : base.superficie_m2),
+    presupuesto: aNumero(d.presupuesto !== undefined ? d.presupuesto : base.presupuesto),
+    moneda: limpiar(d.moneda || base.moneda) || 'UF',
+    plazo_dias: aNumero(d.plazo_dias !== undefined ? d.plazo_dias : base.plazo_dias),
+    fecha_inicio: limpiar(d.fecha_inicio !== undefined ? d.fecha_inicio : base.fecha_inicio, 20),
+    fecha_cierre: limpiar(d.fecha_cierre !== undefined ? d.fecha_cierre : base.fecha_cierre, 20),
+    modalidad: limpiar(d.modalidad !== undefined ? d.modalidad : base.modalidad, 60),
+    especialidades: d.especialidades || base.especialidades || [],
+    doc_planos: doc('doc_planos'), doc_eett: doc('doc_eett'), doc_especialidades: doc('doc_especialidades')
+  };
+}
+function camposPropuesta(d, base) {
+  base = base || {};
+  const monto = aNumero(d.monto !== undefined ? d.monto : base.monto);
+  if (monto === null || monto <= 0) fallo(400, 'Ingresa el monto total de tu propuesta.');
+  const iva = d.incluye_iva !== undefined ? d.incluye_iva : base.incluye_iva;
+  return {
+    monto: monto, moneda: limpiar(d.moneda || base.moneda) || 'UF',
+    incluye_iva: (iva === true || iva === 1 || iva === '1' || iva === 'on') ? 1 : 0,
+    plazo_dias: aNumero(d.plazo_dias !== undefined ? d.plazo_dias : base.plazo_dias),
+    validez_dias: aNumero(d.validez_dias !== undefined ? d.validez_dias : base.validez_dias) || 30,
+    forma_pago: limpiar(d.forma_pago !== undefined ? d.forma_pago : base.forma_pago, 500),
+    exclusiones: limpiar(d.exclusiones !== undefined ? d.exclusiones : base.exclusiones, 2000),
+    observaciones: limpiar(d.observaciones !== undefined ? d.observaciones : base.observaciones, 4000)
+  };
+}
+function proyectoPropio(u, pid) {
+  const p = D.projects.find(x => x.id === pid);
+  if (!p) fallo(404, 'Proyecto no encontrado.');
+  if (p.cliente_id !== u.id && u.role !== 'admin') fallo(403, 'Este proyecto no te pertenece.');
+  return p;
+}
+function leerArchivo(file) {
+  return new Promise(resolve => {
+    if (file.size > 3 * 1024 * 1024) return resolve(null);     // muy grande para el navegador
+    const r = new FileReader();
+    r.onload = () => resolve(r.result);
+    r.onerror = () => resolve(null);
+    r.readAsDataURL(file);
+  });
+}
+
+/* ---------------------------------------------------------- API simulada */
+async function demoApi(method, path, body) {
+  const ruta = path.split('?')[0];
+  const q = new URLSearchParams(path.split('?')[1] || '');
+  const m = re => { const x = ruta.match(re); return x ? x[1] : null; };
+  const esperar = ms => new Promise(r => setTimeout(r, ms));
+  await esperar(90);                       // pequeña latencia, para que se sienta real
+  let id;
+
+  /* ---- sesión */
+  if (ruta === '/api/auth/me') {
+    const u = actual();
+    return { user: usuarioPublico(u),
+             notificaciones: u ? D.events.filter(e => e.user_id === u.id && !e.leido).length : 0 };
+  }
+  if (ruta === '/api/auth/login') {
+    const email = String(body.email || '').trim().toLowerCase();
+    const u = D.users.find(x => x.email === email);
+    if (!u || u.clave !== body.password) fallo(401, 'Correo o contraseña incorrectos.');
+    D.sesion = u.id; guardar();
+    return { user: usuarioPublico(u) };
+  }
+  if (ruta === '/api/auth/logout') { D.sesion = null; guardar(); return { ok: true }; }
+  if (ruta === '/api/auth/registro') {
+    const email = String(body.email || '').trim().toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}$/.test(email)) fallo(400, 'Ingresa un correo electrónico válido.');
+    if ((body.password || '').length < 8) fallo(400, 'La contraseña debe tener al menos 8 caracteres.');
+    if (!limpiar(body.nombre, 120)) fallo(400, 'Ingresa tu nombre de contacto.');
+    if (D.users.some(x => x.email === email)) fallo(409, 'Ya existe una cuenta con ese correo.');
+    const u = { id: nid(), role: body.role, email: email, clave: body.password,
+                nombre: limpiar(body.nombre, 120), telefono: limpiar(body.telefono, 40),
+                created_at: ahora(), perfil: {} };
+    if (body.role === 'cliente') {
+      u.perfil = { tipo: body.tipo || 'persona', rut: limpiar(body.rut, 20),
+                   empresa: limpiar(body.empresa, 120) };
+    } else if (body.role === 'constructora') {
+      if (!limpiar(body.razon_social, 160)) fallo(400, 'Ingresa la razón social de la constructora.');
+      u.perfil = { razon_social: limpiar(body.razon_social, 160), rut: limpiar(body.rut, 20),
+                   anos_experiencia: aNumero(body.anos_experiencia) || 0,
+                   especialidades: body.especialidades || [], regiones: body.regiones || [],
+                   sitio_web: limpiar(body.sitio_web, 200), descripcion: limpiar(body.descripcion, 2000),
+                   registro_mop: limpiar(body.registro_mop, 80), cert_estado: 'pendiente', cert_notas: null };
+    } else fallo(400, 'Selecciona si te registras como cliente o como constructora.');
+    D.users.push(u); D.sesion = u.id;
+    if (u.role === 'constructora') {
+      avisar(u.id, 'certificacion',
+             'Tu solicitud de certificación quedó en revisión. Te avisaremos al aprobarla.');
+    }
+    guardar();
+    return { user: usuarioPublico(u) };
+  }
+  if (ruta === '/api/perfil' && method === 'PATCH') {
+    const u = requerir();
+    if (body.nombre) u.nombre = limpiar(body.nombre, 120);
+    u.telefono = limpiar(body.telefono, 40);
+    u.perfil = u.perfil || {};
+    if (u.role === 'cliente') {
+      u.perfil.tipo = body.tipo || 'persona';
+      u.perfil.rut = limpiar(body.rut, 20);
+      u.perfil.empresa = limpiar(body.empresa, 120);
+    } else if (u.role === 'constructora') {
+      if (body.razon_social) u.perfil.razon_social = limpiar(body.razon_social, 160);
+      u.perfil.rut = limpiar(body.rut, 20);
+      u.perfil.anos_experiencia = aNumero(body.anos_experiencia) || 0;
+      u.perfil.especialidades = body.especialidades || [];
+      u.perfil.regiones = body.regiones || [];
+      u.perfil.sitio_web = limpiar(body.sitio_web, 200);
+      u.perfil.descripcion = limpiar(body.descripcion, 2000);
+      u.perfil.registro_mop = limpiar(body.registro_mop, 80);
+    }
+    guardar();
+    return { user: usuarioPublico(u) };
+  }
+
+  /* ---- proyectos del cliente */
+  if (ruta === '/api/proyectos' && method === 'GET') {
+    const u = requerir('cliente', 'admin');
+    const lista = u.role === 'admin' ? D.projects : D.projects.filter(p => p.cliente_id === u.id);
+    return { proyectos: lista.slice().reverse().map(p => proyectoFila(p, u)) };
+  }
+  if (ruta === '/api/proyectos' && method === 'POST') {
+    const u = requerir('cliente');
+    const f = camposProyecto(body);
+    if (!f.titulo) fallo(400, 'El proyecto necesita un título.');
+    const p = Object.assign({ id: nid(), cliente_id: u.id, estado: 'borrador',
+                              created_at: ahora(), published_at: null, adjudicada_id: null }, f);
+    D.projects.push(p); guardar();
+    return { proyecto: proyectoFila(p, u) };
+  }
+  if ((id = m(/^\/api\/proyectos\/([0-9a-f]{32})$/))) {
+    if (method === 'GET') {
+      const u = actual();
+      const p = D.projects.find(x => x.id === id);
+      if (!p) fallo(404, 'Proyecto no encontrado.');
+      if (u && (u.id === p.cliente_id || u.role === 'admin')) return { proyecto: proyectoFila(p, u) };
+      if (!u) fallo(401, 'Debes iniciar sesión para ver esta licitación.');
+      if (u.role !== 'constructora') fallo(403, 'Sin acceso a este proyecto.');
+      certificada(u);
+      if (p.estado === 'borrador') fallo(403, 'Esta licitación aún no ha sido publicada.');
+      return { proyecto: proyectoFila(p, u) };
+    }
+    if (method === 'PATCH') {
+      const u = requerir('cliente', 'admin');
+      const p = proyectoPropio(u, id);
+      if (p.estado === 'adjudicado' || p.estado === 'cerrado') {
+        fallo(409, 'No se puede editar un proyecto ya adjudicado o cerrado.');
+      }
+      Object.assign(p, camposProyecto(body, p)); guardar();
+      return { proyecto: proyectoFila(p, u) };
+    }
+    if (method === 'DELETE') {
+      const u = requerir('cliente', 'admin');
+      const p = proyectoPropio(u, id);
+      if (p.estado !== 'borrador') fallo(409, 'Solo se pueden eliminar proyectos en borrador.');
+      D.files = D.files.filter(f => f.project_id !== p.id);
+      D.projects = D.projects.filter(x => x.id !== p.id);
+      guardar();
+      return { ok: true };
+    }
+  }
+  if ((id = m(/^\/api\/proyectos\/([0-9a-f]{32})\/publicar$/))) {
+    const u = requerir('cliente', 'admin');
+    const p = proyectoPropio(u, id);
+    if (p.estado !== 'borrador') fallo(409, 'El proyecto ya fue publicado.');
+    const faltan = [['titulo', 'título'], ['descripcion', 'descripción'], ['tipo_obra', 'tipo de obra'],
+                    ['comuna', 'comuna'], ['fecha_cierre', 'fecha de cierre']]
+                   .filter(x => !p[x[0]]).map(x => x[1]);
+    if (faltan.length) fallo(400, 'Completa antes de publicar: ' + faltan.join(', ') + '.');
+    p.estado = 'publicado'; p.published_at = ahora();
+    D.users.filter(x => x.role === 'constructora' && x.perfil &&
+                   x.perfil.cert_estado === 'certificada')
+           .forEach(x => avisar(x.id, 'nueva_licitacion',
+             'Nueva licitación disponible: ' + p.titulo + ' (' + (p.comuna || 's/comuna') + ').', p.id));
+    guardar();
+    return { proyecto: proyectoFila(p, u) };
+  }
+  if ((id = m(/^\/api\/proyectos\/([0-9a-f]{32})\/cerrar$/))) {
+    const u = requerir('cliente', 'admin');
+    const p = proyectoPropio(u, id);
+    if (p.estado === 'cerrado') fallo(409, 'El proyecto ya está cerrado.');
+    p.estado = 'cerrado';
+    D.proposals.filter(x => x.project_id === p.id && x.estado === 'enviada').forEach(x => {
+      x.estado = 'rechazada'; x.updated_at = ahora();
+      avisar(x.constructora_id, 'licitacion_cerrada',
+             'La licitación «' + p.titulo + '» fue cerrada por el cliente.', p.id);
+    });
+    guardar();
+    return { proyecto: proyectoFila(p, u) };
+  }
+  if ((id = m(/^\/api\/proyectos\/([0-9a-f]{32})\/archivos$/))) {
+    const u = requerir('cliente', 'admin');
+    const p = proyectoPropio(u, id);
+    if (p.estado === 'adjudicado' || p.estado === 'cerrado') {
+      fallo(409, 'El proyecto ya no admite nuevos archivos.');
+    }
+    let cat = body.get('categoria') || 'otros';
+    if (['planos', 'eett', 'especialidades', 'otros'].indexOf(cat) === -1) cat = 'otros';
+    const subidos = body.getAll('archivos').filter(f => f && f.size >= 0);
+    if (!subidos.length) fallo(400, 'No se recibió ningún archivo.');
+    const nuevos = [];
+    for (const file of subidos) {
+      const url = await leerArchivo(file);
+      const f = { id: nid(), project_id: p.id, proposal_id: null, owner_id: u.id, categoria: cat,
+                  nombre: file.name, mime: file.type || 'application/octet-stream',
+                  size: file.size, created_at: ahora() };
+      if (url) memFiles.set(f.id, { url: url, mime: f.mime });
+      D.files.push(f); nuevos.push(archivoFila(f));
+    }
+    guardar();
+    return { archivos: nuevos };
+  }
+  if ((id = m(/^\/api\/proyectos\/([0-9a-f]{32})\/propuestas$/))) {
+    if (method === 'GET') {
+      const u = requerir('cliente', 'admin');
+      const p = proyectoPropio(u, id);
+      const lista = D.proposals.filter(x => x.project_id === p.id && x.estado !== 'retirada')
+                               .sort((a, b) => a.monto - b.monto);
+      return { propuestas: lista.map(x => propuestaFila(x, u)) };
+    }
+    const u = requerir('constructora');
+    certificada(u);
+    const p = D.projects.find(x => x.id === id);
+    if (!p) fallo(404, 'Proyecto no encontrado.');
+    if (p.estado !== 'publicado') fallo(409, 'Esta licitación no está recibiendo propuestas.');
+    if (p.fecha_cierre && p.fecha_cierre < ahora().slice(0, 10)) {
+      fallo(409, 'El plazo de esta licitación ya venció.');
+    }
+    const f = camposPropuesta(body);
+    let pr = D.proposals.find(x => x.project_id === p.id && x.constructora_id === u.id);
+    if (pr && pr.estado === 'enviada') fallo(409, 'Ya enviaste una propuesta para esta licitación.');
+    if (pr) { Object.assign(pr, f, { estado: 'enviada', updated_at: ahora() }); }
+    else {
+      pr = Object.assign({ id: nid(), project_id: p.id, constructora_id: u.id, estado: 'enviada',
+                           created_at: ahora(), updated_at: null }, f);
+      D.proposals.push(pr);
+    }
+    avisar(p.cliente_id, 'nueva_propuesta',
+           (u.perfil.razon_social || u.nombre) + ' envió una propuesta para «' + p.titulo + '».', p.id);
+    guardar();
+    return { propuesta: propuestaFila(pr, u) };
+  }
+
+  /* ---- mercado */
+  if (ruta === '/api/mercado') {
+    const u = requerir('constructora', 'admin');
+    if (u.role === 'constructora') certificada(u);
+    let lista = D.projects.filter(p => p.estado === 'publicado' || p.estado === 'adjudicado');
+    const texto = (q.get('q') || '').toLowerCase();
+    if (texto) {
+      lista = lista.filter(p => (p.titulo + ' ' + (p.descripcion || '') + ' ' + (p.comuna || ''))
+                                .toLowerCase().indexOf(texto) >= 0);
+    }
+    if (q.get('tipo')) lista = lista.filter(p => p.tipo_obra === q.get('tipo'));
+    if (q.get('region')) lista = lista.filter(p => p.region === q.get('region'));
+    if (q.get('comuna')) lista = lista.filter(p => p.comuna === q.get('comuna'));
+    if (q.get('con_planos') === '1') lista = lista.filter(p => p.doc_planos !== 'no');
+    if (q.get('abiertas') === '1') lista = lista.filter(p => p.estado === 'publicado');
+    lista = lista.slice().sort((a, b) => String(b.published_at).localeCompare(String(a.published_at)));
+    return { proyectos: lista.map(p => proyectoFila(p, u, false)) };
+  }
+
+  /* ---- propuestas */
+  if (ruta === '/api/propuestas' && method === 'GET') {
+    const u = requerir('constructora');
+    const lista = D.proposals.filter(x => x.constructora_id === u.id).slice().reverse();
+    return { propuestas: lista.map(x => propuestaFila(x, u)) };
+  }
+  if ((id = m(/^\/api\/propuestas\/([0-9a-f]{32})$/)) && method === 'PATCH') {
+    const u = requerir('constructora');
+    const pr = D.proposals.find(x => x.id === id && x.constructora_id === u.id);
+    if (!pr) fallo(404, 'Propuesta no encontrada.');
+    if (pr.estado !== 'enviada') fallo(409, 'Esta propuesta ya no puede editarse.');
+    Object.assign(pr, camposPropuesta(body, pr), { updated_at: ahora() });
+    guardar();
+    return { propuesta: propuestaFila(pr, u) };
+  }
+  if ((id = m(/^\/api\/propuestas\/([0-9a-f]{32})\/retirar$/))) {
+    const u = requerir('constructora');
+    const pr = D.proposals.find(x => x.id === id && x.constructora_id === u.id);
+    if (!pr) fallo(404, 'Propuesta no encontrada.');
+    if (pr.estado !== 'enviada') fallo(409, 'Esta propuesta ya no puede retirarse.');
+    pr.estado = 'retirada'; pr.updated_at = ahora();
+    const p = D.projects.find(x => x.id === pr.project_id);
+    avisar(p.cliente_id, 'propuesta_retirada',
+           'Una constructora retiró su propuesta de «' + p.titulo + '».', p.id);
+    guardar();
+    return { propuesta: propuestaFila(pr, u) };
+  }
+  if ((id = m(/^\/api\/propuestas\/([0-9a-f]{32})\/adjudicar$/))) {
+    const u = requerir('cliente', 'admin');
+    const pr = D.proposals.find(x => x.id === id);
+    if (!pr) fallo(404, 'Propuesta no encontrada.');
+    const p = proyectoPropio(u, pr.project_id);
+    if (p.estado !== 'publicado') fallo(409, 'Esta licitación ya fue resuelta.');
+    if (pr.estado !== 'enviada') fallo(409, 'Solo puedes adjudicar propuestas vigentes.');
+    pr.estado = 'aceptada'; pr.updated_at = ahora();
+    D.proposals.filter(x => x.project_id === p.id && x.id !== pr.id && x.estado === 'enviada')
+      .forEach(x => {
+        x.estado = 'rechazada'; x.updated_at = ahora();
+        avisar(x.constructora_id, 'no_adjudicada',
+               'La licitación «' + p.titulo + '» fue adjudicada a otra constructora.', p.id);
+      });
+    p.estado = 'adjudicado'; p.adjudicada_id = pr.id;
+    avisar(pr.constructora_id, 'adjudicacion',
+           '¡Felicitaciones! Te adjudicaron la licitación «' + p.titulo + '».', p.id);
+    guardar();
+    return { proyecto: proyectoFila(p, u) };
+  }
+  if ((id = m(/^\/api\/propuestas\/([0-9a-f]{32})\/rechazar$/))) {
+    const u = requerir('cliente', 'admin');
+    const pr = D.proposals.find(x => x.id === id);
+    if (!pr) fallo(404, 'Propuesta no encontrada.');
+    const p = proyectoPropio(u, pr.project_id);
+    if (pr.estado !== 'enviada') fallo(409, 'Esta propuesta ya fue resuelta.');
+    pr.estado = 'rechazada'; pr.updated_at = ahora();
+    avisar(pr.constructora_id, 'propuesta_rechazada',
+           'Tu propuesta para «' + p.titulo + '» no fue seleccionada.', p.id);
+    guardar();
+    return { propuesta: propuestaFila(pr, u) };
+  }
+  if ((id = m(/^\/api\/propuestas\/([0-9a-f]{32})\/archivos$/))) {
+    const u = requerir('constructora');
+    const pr = D.proposals.find(x => x.id === id && x.constructora_id === u.id);
+    if (!pr) fallo(404, 'Propuesta no encontrada.');
+    if (pr.estado !== 'enviada') fallo(409, 'La propuesta ya no admite cambios.');
+    const subidos = body.getAll('archivos');
+    if (!subidos.length) fallo(400, 'No se recibió ningún archivo.');
+    const nuevos = [];
+    for (const file of subidos) {
+      const url = await leerArchivo(file);
+      const f = { id: nid(), project_id: pr.project_id, proposal_id: pr.id, owner_id: u.id,
+                  categoria: 'propuesta', nombre: file.name,
+                  mime: file.type || 'application/octet-stream', size: file.size, created_at: ahora() };
+      if (url) memFiles.set(f.id, { url: url, mime: f.mime });
+      D.files.push(f); nuevos.push(archivoFila(f));
+    }
+    guardar();
+    return { archivos: nuevos };
+  }
+
+  /* ---- archivos */
+  if ((id = m(/^\/api\/archivos\/([0-9a-f]{32})$/)) && method === 'DELETE') {
+    const u = requerir();
+    const f = D.files.find(x => x.id === id);
+    if (!f) fallo(404, 'Archivo no encontrado.');
+    if (f.owner_id !== u.id && u.role !== 'admin') fallo(403, 'No puedes eliminar este archivo.');
+    D.files = D.files.filter(x => x.id !== id); memFiles.delete(id); guardar();
+    return { ok: true };
+  }
+
+  /* ---- notificaciones y métricas */
+  if (ruta === '/api/notificaciones' && method === 'GET') {
+    const u = requerir();
+    return { notificaciones: D.events.filter(e => e.user_id === u.id).slice(0, 50) };
+  }
+  if (ruta === '/api/notificaciones/leidas') {
+    const u = requerir();
+    D.events.forEach(e => { if (e.user_id === u.id) e.leido = 1; });
+    guardar();
+    return { ok: true };
+  }
+  if (ruta === '/api/stats') {
+    return { stats: {
+      constructoras: D.users.filter(u => u.role === 'constructora' && u.perfil &&
+                                    u.perfil.cert_estado === 'certificada').length,
+      licitaciones: D.projects.filter(p => p.estado === 'publicado').length,
+      proyectos: D.projects.length,
+      propuestas: D.proposals.length } };
+  }
+
+  /* ---- administración */
+  if (ruta === '/api/admin/constructoras') {
+    requerir('admin');
+    const lista = D.users.filter(u => u.role === 'constructora').map(u => {
+      const p = u.perfil || {};
+      return { user_id: u.id, email: u.email, nombre: u.nombre, telefono: u.telefono,
+               created_at: u.created_at, razon_social: p.razon_social, rut: p.rut,
+               anos_experiencia: p.anos_experiencia, especialidades: p.especialidades || [],
+               regiones: p.regiones || [], sitio_web: p.sitio_web, descripcion: p.descripcion,
+               registro_mop: p.registro_mop, cert_estado: p.cert_estado, cert_notas: p.cert_notas,
+               propuestas: D.proposals.filter(x => x.constructora_id === u.id).length };
+    });
+    lista.sort((a, b) => (a.cert_estado === 'pendiente' ? 0 : 1) - (b.cert_estado === 'pendiente' ? 0 : 1));
+    return { constructoras: lista };
+  }
+  if ((id = m(/^\/api\/admin\/constructoras\/([0-9a-f]{32})\/certificacion$/))) {
+    requerir('admin');
+    const estado = body.estado;
+    if (['pendiente', 'certificada', 'rechazada'].indexOf(estado) === -1) {
+      fallo(400, 'Estado de certificación inválido.');
+    }
+    const u = D.users.find(x => x.id === id && x.role === 'constructora');
+    if (!u) fallo(404, 'Constructora no encontrada.');
+    u.perfil.cert_estado = estado;
+    u.perfil.cert_notas = limpiar(body.notas, 1000);
+    const msg = { certificada: 'Tu empresa fue certificada: ya puedes explorar y licitar proyectos.',
+                  rechazada: 'Tu solicitud de certificación fue rechazada.',
+                  pendiente: 'Tu certificación volvió a revisión.' };
+    avisar(u.id, 'certificacion', msg[estado]);
+    guardar();
+    return { ok: true, cert_estado: estado };
+  }
+  if (ruta === '/api/admin/resumen') {
+    requerir('admin');
+    return { resumen: {
+      clientes: D.users.filter(u => u.role === 'cliente').length,
+      constructoras: D.users.filter(u => u.role === 'constructora').length,
+      pendientes: D.users.filter(u => u.role === 'constructora' && u.perfil &&
+                              u.perfil.cert_estado === 'pendiente').length,
+      proyectos: D.projects.length,
+      publicados: D.projects.filter(p => p.estado === 'publicado').length,
+      propuestas: D.proposals.length } };
+  }
+
+  fallo(404, 'Recurso no encontrado.');
+}
+
+D = cargar();
+
+</script>
+<script>
+/* OBRUM — SPA (sin dependencias) */
+'use strict';
+
+/* ------------------------------------------------------------ constantes */
+const TIPOS_OBRA = ['Vivienda unifamiliar', 'Edificio', 'Comercial', 'Oficinas', 'Industrial',
+  'Obra civil', 'Remodelación', 'Ampliación', 'Urbanización', 'Otro'];
+const MODALIDADES = ['Suma alzada', 'Serie de precios unitarios', 'Administración delegada',
+  'Precio máximo garantizado'];
+const REGIONES = ['Arica y Parinacota', 'Tarapacá', 'Antofagasta', 'Atacama', 'Coquimbo',
+  'Valparaíso', 'Metropolitana', "O'Higgins", 'Maule', 'Ñuble', 'Biobío', 'La Araucanía',
+  'Los Ríos', 'Los Lagos', 'Aysén', 'Magallanes'];
+const ESPECIALIDADES = ['Cálculo estructural', 'Instalaciones eléctricas', 'Instalaciones sanitarias',
+  'Climatización', 'Gas', 'Protección contra incendios', 'Corrientes débiles', 'Ascensores',
+  'Pavimentación', 'Paisajismo', 'Eficiencia energética', 'Mecánica de suelos'];
+const RUBROS = ['Obra gruesa', 'Terminaciones', 'Obra civil', 'Movimiento de tierras',
+  'Instalaciones eléctricas', 'Instalaciones sanitarias', 'Climatización', 'Estructuras metálicas',
+  'Remodelaciones', 'Urbanización'];
+
+const CATEGORIAS = {
+  planos: { label: 'Planos de arquitectura', icon: 'ARQ' },
+  eett: { label: 'Especificaciones técnicas (EETT)', icon: 'EETT' },
+  especialidades: { label: 'Proyectos de especialidades', icon: 'ESP' },
+  otros: { label: 'Otros antecedentes', icon: 'DOC' }
+};
+
+const ESTADO_PROYECTO = {
+  borrador: ['gray', 'Borrador'], publicado: ['blue', 'En licitación'],
+  adjudicado: ['green', 'Adjudicado'], cerrado: ['gray', 'Cerrado']
+};
+const ESTADO_PROPUESTA = {
+  enviada: ['blue', 'Enviada'], aceptada: ['green', 'Adjudicada'],
+  rechazada: ['red', 'No seleccionada'], retirada: ['gray', 'Retirada']
+};
+const ESTADO_CERT = {
+  pendiente: ['amber', 'Certificación pendiente'], certificada: ['green', 'Certificada'],
+  rechazada: ['red', 'Certificación rechazada']
+};
+const DOC_ESTADO = { si: ['green', 'Sí'], parcial: ['amber', 'Parcial'], no: ['gray', 'No'] };
+
+/* ------------------------------------------------------------ estado */
+const state = { user: null, notifs: 0, route: '', params: [], cache: {} };
+
+/* ------------------------------------------------------------ utilidades */
+const $ = (sel, root) => (root || document).querySelector(sel);
+const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+
+function esc(v) {
+  if (v === null || v === undefined) return '';
+  return String(v).replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+function money(v, mon) {
+  if (v === null || v === undefined || v === '') return '—';
+  const n = Number(v);
+  const dec = (mon === 'CLP') ? 0 : (Math.abs(n) < 1000 ? 2 : 0);
+  return n.toLocaleString('es-CL', { minimumFractionDigits: dec, maximumFractionDigits: dec }) +
+    ' ' + (mon || 'UF');
+}
+function num(v, suf) {
+  if (v === null || v === undefined || v === '') return '—';
+  return Number(v).toLocaleString('es-CL') + (suf ? ' ' + suf : '');
+}
+function fecha(v) {
+  if (!v) return '—';
+  const d = new Date(v.length <= 10 ? v + 'T12:00:00' : v);
+  if (isNaN(d)) return v;
+  return d.toLocaleDateString('es-CL', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+function desde(v) {
+  if (!v) return '';
+  const diff = (Date.now() - new Date(v).getTime()) / 1000;
+  if (diff < 60) return 'hace instantes';
+  if (diff < 3600) return `hace ${Math.floor(diff / 60)} min`;
+  if (diff < 86400) return `hace ${Math.floor(diff / 3600)} h`;
+  if (diff < 2592000) return `hace ${Math.floor(diff / 86400)} días`;
+  return fecha(v);
+}
+function diasRestantes(cierre) {
+  if (!cierre) return null;
+  const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+  return Math.round((new Date(cierre + 'T12:00:00') - hoy) / 86400000);
+}
+function peso(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1048576) return (bytes / 1024).toFixed(0) + ' KB';
+  return (bytes / 1048576).toFixed(1) + ' MB';
+}
+function badge(map, key) {
+  const [color, label] = map[key] || ['gray', key || '—'];
+  return `<span class="badge ${color}">${esc(label)}</span>`;
+}
+function iniciales(nombre) {
+  return (nombre || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+}
+function toast(msg, kind) {
+  const el = document.createElement('div');
+  el.className = 'toast' + (kind ? ' ' + kind : '');
+  el.textContent = msg;
+  $('#toasts').appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; }, 3200);
+  setTimeout(() => el.remove(), 3600);
+}
+function go(hash) { location.hash = hash; }
+
+/* ------------------------------------------------------------ api */
+async function api(method, path, body) {
+  return demoApi(method, path, body);   // demo: el servidor vive en el navegador
+}
+
+const GET = p => api('GET', p);
+const POST = (p, b) => api('POST', p, b);
+const PATCH = (p, b) => api('PATCH', p, b);
+const DEL = p => api('DELETE', p);
+
+function formData(form) {
+  const out = {};
+  $$('input, select, textarea', form).forEach(el => {
+    if (!el.name) return;
+    if (el.type === 'checkbox') {
+      if (el.dataset.multi) {
+        out[el.name] = out[el.name] || [];
+        if (el.checked) out[el.name].push(el.value);
+      } else out[el.name] = el.checked;
+    } else if (el.type === 'radio') {
+      if (el.checked) out[el.name] = el.value;
+    } else out[el.name] = el.value;
+  });
+  return out;
+}
+async function submitting(btn, fn) {
+  const original = btn ? btn.innerHTML : null;
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Procesando…'; }
+  try { await fn(); } catch (err) { toast(err.message, 'err'); }
+  finally { if (btn) { btn.disabled = false; btn.innerHTML = original; } }
+}
+
+/* ------------------------------------------------------------ modal */
+function modal(html, onMount) {
+  const root = $('#modal-root');
+  root.innerHTML = `<div class="modal-bg" data-close="1"><div class="modal">${html}</div></div>`;
+  root.onclick = e => {
+    if (e.target.dataset.close || e.target.closest('[data-close-modal]')) closeModal();
+  };
+  if (onMount) onMount($('.modal', root));
+}
+function closeModal() { const r = $('#modal-root'); r.onclick = null; r.innerHTML = ''; }
+
+/* Diálogo de confirmación propio (reemplaza confirm/prompt nativos) */
+function dialogo(opts) {
+  return new Promise(resolve => {
+    const html = `
+      <h2 style="margin-top:0">${esc(opts.titulo)}</h2>
+      ${opts.mensaje ? `<p class="muted">${esc(opts.mensaje)}</p>` : ''}
+      ${opts.campo ? `<label class="field"><span class="lbl">${esc(opts.campo)}</span>
+        <textarea id="dlg-campo" style="min-height:70px"></textarea></label>` : ''}
+      <div class="row end" style="margin-top:10px">
+        <button class="btn ghost" data-dlg="0">${esc(opts.cancelar || 'Cancelar')}</button>
+        <button class="btn ${opts.tono || ''}" data-dlg="1">${esc(opts.ok || 'Confirmar')}</button>
+      </div>`;
+    let done = false;
+    const finish = v => { if (done) return; done = true; closeModal(); resolve(v); };
+    modal(html, box => {
+      $$('[data-dlg]', box).forEach(b => b.addEventListener('click', () => {
+        if (b.dataset.dlg === '0') return finish(opts.campo ? null : false);
+        finish(opts.campo ? (($('#dlg-campo', box) || {}).value || '') : true);
+      }));
+      const ok = $('[data-dlg="1"]', box); if (ok) ok.focus();
+    });
+    $('#modal-root').onclick = e => {
+      if (e.target.dataset.close) finish(opts.campo ? null : false);
+    };
+  });
+}
+
+/* ------------------------------------------------------------ navegación */
+function renderNav() {
+  const u = state.user;
+  const here = location.hash || '#/';
+  const link = (href, label) =>
+    `<a href="${href}" class="${here.startsWith(href) && href !== '#/' ? 'active' : ''}">${label}</a>`;
+  let links = '';
+  if (!u) {
+    links = `${link('#/como-funciona', 'Cómo funciona')}
+      <a href="#/ingresar" class="btn ghost sm" style="margin-left:6px">Iniciar sesión</a>
+      <a href="#/registro" class="btn sm">Crear cuenta</a>`;
+  } else if (u.role === 'cliente') {
+    links = link('#/proyectos', 'Mis proyectos') + link('#/proyectos/nuevo', 'Publicar proyecto');
+  } else if (u.role === 'constructora') {
+    links = link('#/mercado', 'Explorar licitaciones') + link('#/propuestas', 'Mis propuestas');
+  } else if (u.role === 'admin') {
+    links = link('#/admin', 'Panel') + link('#/proyectos', 'Proyectos');
+  }
+  let user = '';
+  if (u) {
+    user = `<div class="nav-user">
+      <a class="bell" href="#/notificaciones" title="Notificaciones">🔔${state.notifs
+        ? `<span class="dot">${state.notifs > 9 ? '9+' : state.notifs}</span>` : ''}</a>
+      <a href="#/perfil" class="row" style="gap:8px;color:var(--ink)" title="Mi perfil">
+        <span class="avatar">${esc(iniciales(u.perfil?.razon_social || u.perfil?.empresa || u.nombre))}</span>
+      </a>
+      <button class="btn ghost sm" data-action="logout">Salir</button>
+    </div>`;
+  }
+  $('#nav').innerHTML = links + user;
+}
+
+/* ------------------------------------------------------------ landing */
+async function viewLanding() {
+  let stats = { constructoras: 0, licitaciones: 0, proyectos: 0, propuestas: 0 };
+  try { stats = (await GET('/api/stats')).stats; } catch (e) { /* ignorar */ }
+  return `
+  <section class="hero">
+    <img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%20role%3D%22img%22%20aria-label%3D%22OBRUM%22%3E%0A%20%20%3Ctitle%3EOBRUM%3C%2Ftitle%3E%0A%20%20%3Cpath%20fill%3D%22%23b0685a%22%20fill-rule%3D%22evenodd%22%20stroke%3D%22%23b0685a%22%20stroke-width%3D%223.2%22%20stroke-linejoin%3D%22round%22%0A%20%20%20%20%20%20%20%20d%3D%22M50%206%20L80%2017%20L95%2044%20L88%2074%20L60%2093%20L30%2086%20L9%2060%20L16%2025%20Z%0A%20%20%20%20%20%20%20%20%20%20%20M55%2023%20L75%2030%20L83%2049%20L77%2069%20L58%2077%20L37%2071%20L27%2053%20L33%2030%20Z%22%2F%3E%0A%3C%2Fsvg%3E%0A" alt="" width="64" height="64" style="display:block;margin-bottom:18px">
+    <span class="eyebrow">Marketplace de licitaciones</span>
+    <h1>Tu proyecto de obra, licitado por constructoras certificadas.</h1>
+    <p class="lede">Publica tu proyecto con planos, especificaciones técnicas y especialidades.
+      Las constructoras certificadas revisan los antecedentes, descargan los archivos y te envían
+      su propuesta. Tú comparas y adjudicas.</p>
+    <div class="cta">
+      <a class="btn accent lg" href="#/registro?rol=cliente">Soy cliente · publicar proyecto</a>
+      <a class="btn ghost lg" href="#/registro?rol=constructora">Soy constructora · quiero licitar</a>
+    </div>
+  </section>
+
+  <section class="grid four" style="margin-bottom:34px">
+    <div class="stat"><b>${stats.constructoras}</b><span>Constructoras certificadas</span></div>
+    <div class="stat"><b>${stats.licitaciones}</b><span>Licitaciones abiertas</span></div>
+    <div class="stat"><b>${stats.proyectos}</b><span>Proyectos publicados</span></div>
+    <div class="stat"><b>${stats.propuestas}</b><span>Propuestas recibidas</span></div>
+  </section>
+
+  <section id="como-funciona" class="how" style="margin-bottom:28px">
+    <div class="card">
+      <span class="badge blue" style="margin-bottom:10px">Para clientes</span>
+      <h2>Publica y recibe propuestas</h2>
+      <ol>
+        <li><strong>Crea tu proyecto</strong> con ubicación, superficie, plazo y presupuesto referencial.</li>
+        <li><strong>Declara qué documentación tienes</strong>: planos de arquitectura, EETT y especialidades.</li>
+        <li><strong>Sube los archivos</strong> por categoría para que las constructoras coticen sobre lo mismo.</li>
+        <li><strong>Publica la licitación</strong> con fecha de cierre y recibe propuestas.</li>
+        <li><strong>Compara y adjudica</strong> montos, plazos, formas de pago y exclusiones.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <span class="badge accent" style="margin-bottom:10px">Para constructoras</span>
+      <h2>Explora, descarga y licita</h2>
+      <ol>
+        <li><strong>Regístrate</strong> con tu razón social, experiencia y especialidades.</li>
+        <li><strong>Certifícate</strong>: validamos tus antecedentes antes de darte acceso.</li>
+        <li><strong>Explora licitaciones</strong> filtrando por tipo de obra, región y documentación.</li>
+        <li><strong>Descarga planos y EETT</strong> directamente desde la ficha del proyecto.</li>
+        <li><strong>Envía tu propuesta</strong> con monto, plazo, validez y adjuntos.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="card demo-box">
+    <h3>Cuentas de demostración</h3>
+    <p class="muted">Contraseña para todas: <code>demo1234</code></p>
+    <div class="grid three">
+      <div><strong>Cliente</strong><br><code>cliente@demo.cl</code></div>
+      <div><strong>Constructora certificada</strong><br><code>constructora@demo.cl</code></div>
+      <div><strong>Administrador</strong><br><code>admin@obrum.cl</code></div>
+    </div>
+  </section>`;
+}
+
+/* ------------------------------------------------------------ auth */
+function viewLogin() {
+  return `<div class="narrow" style="margin:0 auto;max-width:440px">
+    <div class="card">
+      <h1 style="font-size:1.5rem">Iniciar sesión</h1>
+      <p class="muted small">Accede a tu cuenta de cliente o constructora.</p>
+      <form id="form-login" style="margin-top:16px">
+        <label class="field"><span class="lbl">Correo electrónico</span>
+          <input type="email" name="email" required autocomplete="email" placeholder="tu@correo.cl"></label>
+        <label class="field"><span class="lbl">Contraseña</span>
+          <input type="password" name="password" required autocomplete="current-password"></label>
+        <button class="btn block" type="submit">Entrar</button>
+      </form>
+      <hr class="sep">
+      <p class="small center muted">¿No tienes cuenta? <a href="#/registro">Regístrate</a></p>
+    </div>
+  </div>`;
+}
+
+function mountLogin() {
+  $('#form-login').addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = $('button[type=submit]', e.target);
+    submitting(btn, async () => {
+      const data = await POST('/api/auth/login', formData(e.target));
+      state.user = data.user;
+      toast('Bienvenido de vuelta, ' + data.user.nombre.split(' ')[0], 'ok');
+      afterLogin();
+    });
+  });
+}
+
+function viewRegistro() {
+  const rol = new URLSearchParams((location.hash.split('?')[1] || '')).get('rol') || 'cliente';
+  return `<div class="narrow" style="margin:0 auto;max-width:620px">
+    <div class="card">
+      <h1 style="font-size:1.5rem">Crear cuenta</h1>
+      <p class="muted small">Elige cómo vas a usar OBRUM.</p>
+      <div class="role-pick" style="margin-top:16px">
+        <div class="role-card ${rol === 'cliente' ? 'on' : ''}" data-rol="cliente">
+          <strong>🏠 Soy cliente</strong>
+          <span>Quiero publicar un proyecto y recibir propuestas de constructoras.</span>
+        </div>
+        <div class="role-card ${rol === 'constructora' ? 'on' : ''}" data-rol="constructora">
+          <strong>🏗️ Soy constructora</strong>
+          <span>Quiero explorar proyectos, descargar antecedentes y licitar.</span>
+        </div>
+      </div>
+      <form id="form-registro">
+        <input type="hidden" name="role" value="${esc(rol)}">
+        <div class="grid two">
+          <label class="field"><span class="lbl">Nombre de contacto *</span>
+            <input type="text" name="nombre" required placeholder="Nombre y apellido"></label>
+          <label class="field"><span class="lbl">Teléfono</span>
+            <input type="tel" name="telefono" placeholder="+56 9 ..."></label>
+        </div>
+        <div class="grid two">
+          <label class="field"><span class="lbl">Correo electrónico *</span>
+            <input type="email" name="email" required autocomplete="email"></label>
+          <label class="field"><span class="lbl">Contraseña *</span>
+            <input type="password" name="password" required minlength="8" autocomplete="new-password">
+            <span class="hint">Mínimo 8 caracteres</span></label>
+        </div>
+
+        <div id="campos-cliente" class="${rol === 'cliente' ? '' : 'hidden'}">
+          <hr class="sep">
+          <div class="grid two">
+            <label class="field"><span class="lbl">Tipo de cliente</span>
+              <select name="tipo"><option value="persona">Persona natural</option>
+                <option value="empresa">Empresa / inmobiliaria</option></select></label>
+            <label class="field"><span class="lbl">RUT</span>
+              <input type="text" name="rut" placeholder="12.345.678-9"></label>
+          </div>
+          <label class="field"><span class="lbl">Empresa (opcional)</span>
+            <input type="text" name="empresa" placeholder="Razón social"></label>
+        </div>
+
+        <div id="campos-constructora" class="${rol === 'constructora' ? '' : 'hidden'}">
+          <hr class="sep">
+          <div class="grid two">
+            <label class="field"><span class="lbl">Razón social *</span>
+              <input type="text" name="razon_social" placeholder="Constructora ... Ltda."></label>
+            <label class="field"><span class="lbl">RUT empresa</span>
+              <input type="text" name="rut_empresa" placeholder="76.543.210-8"></label>
+          </div>
+          <div class="grid two">
+            <label class="field"><span class="lbl">Años de experiencia</span>
+              <input type="number" name="anos_experiencia" min="0" max="120" value="0"></label>
+            <label class="field"><span class="lbl">Registro / certificaciones</span>
+              <input type="text" name="registro_mop" placeholder="Ej: Registro MOP 1ª categoría"></label>
+          </div>
+          <fieldset><legend>Rubros en que trabajan</legend>
+            <div class="chips">${RUBROS.map(r =>
+              `<label class="chip"><input type="checkbox" name="especialidades" data-multi="1" value="${esc(r)}">${esc(r)}</label>`).join('')}</div>
+          </fieldset>
+          <fieldset style="margin-top:14px"><legend>Regiones donde operan</legend>
+            <div class="chips">${REGIONES.map(r =>
+              `<label class="chip"><input type="checkbox" name="regiones" data-multi="1" value="${esc(r)}">${esc(r)}</label>`).join('')}</div>
+          </fieldset>
+          <label class="field" style="margin-top:14px"><span class="lbl">Sitio web</span>
+            <input type="url" name="sitio_web" placeholder="https://"></label>
+          <label class="field"><span class="lbl">Descripción de la empresa</span>
+            <textarea name="descripcion" placeholder="Experiencia, obras destacadas, capacidad de ejecución…"></textarea></label>
+          <div class="notice info"><div>🔎 <strong>Revisión de certificación.</strong> Tu cuenta queda
+            en revisión: podrás completar tu perfil, y al aprobarla tendrás acceso a las licitaciones
+            y a los archivos de cada proyecto.</div></div>
+        </div>
+
+        <button class="btn block lg" type="submit" style="margin-top:18px">Crear cuenta</button>
+      </form>
+      <hr class="sep">
+      <p class="small center muted">¿Ya tienes cuenta? <a href="#/ingresar">Inicia sesión</a></p>
+    </div>
+  </div>`;
+}
+
+function mountRegistro() {
+  $$('.role-card').forEach(card => card.addEventListener('click', () => {
+    const rol = card.dataset.rol;
+    $$('.role-card').forEach(c => c.classList.toggle('on', c === card));
+    $('input[name=role]').value = rol;
+    $('#campos-cliente').classList.toggle('hidden', rol !== 'cliente');
+    $('#campos-constructora').classList.toggle('hidden', rol !== 'constructora');
+  }));
+  wireChips();
+  $('#form-registro').addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = $('button[type=submit]', e.target);
+    submitting(btn, async () => {
+      const d = formData(e.target);
+      if (d.role === 'constructora') {
+        if (!d.razon_social) throw new Error('Ingresa la razón social de la constructora.');
+        d.rut = d.rut_empresa;
+      }
+      const data = await POST('/api/auth/registro', d);
+      state.user = data.user;
+      toast('Cuenta creada. ¡Bienvenido!', 'ok');
+      afterLogin();
+    });
+  });
+}
+
+function wireChips(root) {
+  $$('.chip input', root).forEach(input => {
+    const set = () => input.closest('.chip').classList.toggle('on', input.checked);
+    input.addEventListener('change', set); set();
+  });
+}
+
+function afterLogin() {
+  state.notifs = 0;
+  const home = { cliente: '#/proyectos', constructora: '#/mercado', admin: '#/admin' }[state.user.role];
+  go(home || '#/');
+  render();
+}
+
+/* ============================================================ CLIENTE */
+
+function projectCard(p, hrefBase) {
+  const dias = diasRestantes(p.fecha_cierre);
+  const cierre = p.estado === 'publicado' && dias !== null
+    ? (dias < 0 ? '<span class="badge red">Plazo vencido</span>'
+      : `<span class="badge ${dias <= 3 ? 'amber' : 'gray'}">Cierra en ${dias} día${dias === 1 ? '' : 's'}</span>`)
+    : '';
+  const docs = [['planos', p.doc_planos], ['eett', p.doc_eett], ['especialidades', p.doc_especialidades]]
+    .filter(([, v]) => v && v !== 'no')
+    .map(([k]) => `<span class="badge blue">${esc({ planos: 'Planos', eett: 'EETT', especialidades: 'Especialidades' }[k])}</span>`)
+    .join(' ') || '<span class="badge gray">Sin documentación</span>';
+  return `<article class="project-card">
+    <div class="row" style="gap:8px">${badge(ESTADO_PROYECTO, p.estado)}${cierre}</div>
+    <h3><a href="${hrefBase}/${p.id}">${esc(p.titulo)}</a></h3>
+    <div class="meta">
+      <span>📍 ${esc(p.comuna || '—')}${p.region ? ', ' + esc(p.region) : ''}</span>
+      <span>🏗️ ${esc(p.tipo_obra || '—')}</span>
+      ${p.superficie_m2 ? `<span>📐 ${num(p.superficie_m2)} m²</span>` : ''}
+      ${p.presupuesto ? `<span>💰 ${money(p.presupuesto, p.moneda)}</span>` : ''}
+    </div>
+    <p class="desc">${esc(p.descripcion || 'Sin descripción.')}</p>
+    <div class="row" style="gap:6px">${docs}</div>
+    <footer>
+      <span class="small muted">${p.estado === 'borrador'
+        ? 'Creado ' + desde(p.created_at)
+        : `${p.propuestas_count} propuesta${p.propuestas_count === 1 ? '' : 's'}`}</span>
+      <a class="btn ghost sm" style="margin-left:auto" href="${hrefBase}/${p.id}">Ver ficha</a>
+    </footer>
+  </article>`;
+}
+
+async function viewMisProyectos() {
+  const { proyectos } = await GET('/api/proyectos');
+  const grupos = {
+    publicado: proyectos.filter(p => p.estado === 'publicado'),
+    borrador: proyectos.filter(p => p.estado === 'borrador'),
+    resueltos: proyectos.filter(p => p.estado === 'adjudicado' || p.estado === 'cerrado')
+  };
+  const propuestas = proyectos.reduce((a, p) => a + p.propuestas_count, 0);
+  const bloque = (titulo, lista) => !lista.length ? '' : `
+    <h2 style="margin:26px 0 12px;font-size:1.05rem">${titulo}
+      <span class="dim small" style="font-weight:400">· ${lista.length}</span></h2>
+    <div class="grid three">${lista.map(p => projectCard(p, '#/proyecto')).join('')}</div>`;
+
+  return `<div class="page-head">
+      <div><h1>Mis proyectos</h1><p>Publica, recibe propuestas y adjudica tus obras.</p></div>
+      <div class="spacer"></div>
+      <a class="btn" href="#/proyectos/nuevo">+ Nuevo proyecto</a>
+    </div>
+    <div class="grid four" style="margin-bottom:8px">
+      <div class="stat"><b>${proyectos.length}</b><span>Proyectos</span></div>
+      <div class="stat"><b>${grupos.publicado.length}</b><span>En licitación</span></div>
+      <div class="stat"><b>${propuestas}</b><span>Propuestas recibidas</span></div>
+      <div class="stat"><b>${grupos.resueltos.length}</b><span>Resueltos</span></div>
+    </div>
+    ${proyectos.length ? '' : `<div class="card empty"><span class="ico">📋</span>
+      <h3>Aún no tienes proyectos</h3>
+      <p class="muted">Crea tu primer proyecto, sube los planos y las EETT, y publícalo para recibir propuestas.</p>
+      <a class="btn" href="#/proyectos/nuevo">Crear mi primer proyecto</a></div>`}
+    ${bloque('En licitación', grupos.publicado)}
+    ${bloque('Borradores', grupos.borrador)}
+    ${bloque('Adjudicados y cerrados', grupos.resueltos)}`;
+}
+
+function docSelector(name, label, ayuda) {
+  return `<div class="card" style="padding:14px;box-shadow:none">
+    <strong style="font-size:.92rem">${esc(label)}</strong>
+    <p class="hint" style="margin:2px 0 8px">${esc(ayuda)}</p>
+    <div class="row" style="gap:14px">
+      ${[['si', 'Sí, los tengo'], ['parcial', 'Parcialmente'], ['no', 'No los tengo']].map((o, i) =>
+        `<label class="check" style="margin:0"><input type="radio" name="${name}" value="${o[0]}" ${i === 2 ? 'checked' : ''}>${o[1]}</label>`).join('')}
+    </div>
+  </div>`;
+}
+
+function projectForm(p) {
+  p = p || {};
+  const sel = (v, opts) => opts.map(o =>
+    `<option value="${esc(o)}" ${v === o ? 'selected' : ''}>${esc(o)}</option>`).join('');
+  return `<form id="form-proyecto">
+    <div class="card">
+      <h2>1. Datos del proyecto</h2>
+      <label class="field"><span class="lbl">Título del proyecto *</span>
+        <input type="text" name="titulo" required maxlength="160" value="${esc(p.titulo || '')}"
+          placeholder="Ej: Edificio habitacional 4 pisos - Ñuñoa"></label>
+      <label class="field"><span class="lbl">Descripción y alcance *</span>
+        <textarea name="descripcion" placeholder="Describe la obra, su alcance, estado de permisos y cualquier condición relevante para cotizar.">${esc(p.descripcion || '')}</textarea></label>
+      <div class="grid three">
+        <label class="field"><span class="lbl">Tipo de obra *</span>
+          <select name="tipo_obra"><option value="">Selecciona…</option>${sel(p.tipo_obra, TIPOS_OBRA)}</select></label>
+        <label class="field"><span class="lbl">Modalidad de contrato</span>
+          <select name="modalidad"><option value="">Selecciona…</option>${sel(p.modalidad, MODALIDADES)}</select></label>
+        <label class="field"><span class="lbl">Superficie (m²)</span>
+          <input type="number" name="superficie_m2" min="0" step="0.01" value="${esc(p.superficie_m2 ?? '')}"></label>
+      </div>
+      <div class="grid three">
+        <label class="field"><span class="lbl">Región</span>
+          <select name="region"><option value="">Selecciona…</option>${sel(p.region, REGIONES)}</select></label>
+        <label class="field"><span class="lbl">Comuna *</span>
+          <input type="text" name="comuna" value="${esc(p.comuna || '')}" placeholder="Ej: Providencia"></label>
+        <label class="field"><span class="lbl">Dirección</span>
+          <input type="text" name="direccion" value="${esc(p.direccion || '')}" placeholder="Calle y número"></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. Presupuesto y plazos</h2>
+      <div class="grid four">
+        <label class="field"><span class="lbl">Presupuesto referencial</span>
+          <input type="number" name="presupuesto" min="0" step="0.01" value="${esc(p.presupuesto ?? '')}"></label>
+        <label class="field"><span class="lbl">Moneda</span>
+          <select name="moneda">${sel(p.moneda || 'UF', ['UF', 'CLP', 'USD'])}</select></label>
+        <label class="field"><span class="lbl">Plazo estimado (días)</span>
+          <input type="number" name="plazo_dias" min="0" value="${esc(p.plazo_dias ?? '')}"></label>
+        <label class="field"><span class="lbl">Inicio estimado</span>
+          <input type="date" name="fecha_inicio" value="${esc((p.fecha_inicio || '').slice(0, 10))}"></label>
+      </div>
+      <label class="field" style="max-width:280px"><span class="lbl">Cierre de la licitación *</span>
+        <input type="date" name="fecha_cierre" value="${esc((p.fecha_cierre || '').slice(0, 10))}">
+        <span class="hint">Hasta cuándo las constructoras pueden enviar propuestas.</span></label>
+    </div>
+
+    <div class="card">
+      <h2>3. Documentación disponible</h2>
+      <p class="muted small">Indica con qué antecedentes cuentas. Esto es lo primero que miran las
+        constructoras para decidir si pueden cotizar.</p>
+      <div class="stack" style="gap:10px">
+        ${docSelector('doc_planos', '📐 Planos de arquitectura',
+          'Plantas, cortes, elevaciones, emplazamiento.')}
+        ${docSelector('doc_eett', '📄 Especificaciones técnicas (EETT)',
+          'Documento con partidas, materiales y estándares de terminación.')}
+        ${docSelector('doc_especialidades', '⚙️ Proyectos de especialidades',
+          'Cálculo, eléctrico, sanitario, clima, gas, incendio, etc.')}
+      </div>
+      <fieldset style="margin-top:18px"><legend>Especialidades involucradas en la obra</legend>
+        <div class="chips">${ESPECIALIDADES.map(e =>
+          `<label class="chip"><input type="checkbox" name="especialidades" data-multi="1" value="${esc(e)}"
+            ${(p.especialidades || []).includes(e) ? 'checked' : ''}>${esc(e)}</label>`).join('')}</div>
+      </fieldset>
+    </div>
+    <div class="row end" style="margin-top:18px">
+      <a class="btn ghost" href="#/proyectos">Cancelar</a>
+      <button class="btn lg" type="submit">${p.id ? 'Guardar cambios' : 'Crear proyecto y subir archivos'}</button>
+    </div>
+  </form>`;
+}
+
+function viewNuevoProyecto() {
+  return `<div class="page-head"><div><h1>Nuevo proyecto</h1>
+    <p>Completa la ficha. Después podrás subir los archivos y publicar la licitación.</p></div></div>
+    <div class="narrow">${projectForm()}</div>`;
+}
+
+function mountProjectForm(existing) {
+  wireChips();
+  if (existing) {
+    ['doc_planos', 'doc_eett', 'doc_especialidades'].forEach(k => {
+      const el = $(`input[name=${k}][value="${existing[k] || 'no'}"]`);
+      if (el) el.checked = true;
+    });
+  }
+  $('#form-proyecto').addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = $('button[type=submit]', e.target);
+    submitting(btn, async () => {
+      const d = formData(e.target);
+      if (!d.titulo) throw new Error('El proyecto necesita un título.');
+      if (existing) {
+        await PATCH('/api/proyectos/' + existing.id, d);
+        toast('Proyecto actualizado', 'ok');
+        closeModal(); render();
+      } else {
+        const { proyecto } = await POST('/api/proyectos', d);
+        toast('Proyecto creado. Ahora sube los archivos.', 'ok');
+        go('#/proyecto/' + proyecto.id);
+      }
+    });
+  });
+}
+
+function fileList(archivos, puedeBorrar) {
+  if (!archivos.length) return '<p class="dim small">Sin archivos en esta categoría.</p>';
+  return archivos.map(f => `<div class="file-row">
+    <span class="ficon">${esc(CATEGORIAS[f.categoria]?.icon || 'DOC')}</span>
+    <div><div class="fname">${esc(f.nombre)}</div>
+      <div class="fmeta">${peso(f.size)} · ${desde(f.created_at)}</div></div>
+    <div class="spacer"></div>
+    <button class="btn ghost sm" data-action="ver-archivo" data-id="${f.id}">Abrir</button>
+    ${puedeBorrar ? `<button class="btn danger sm" data-action="del-file" data-id="${f.id}">Eliminar</button>` : ''}
+  </div>`).join('');
+}
+
+function uploadZone(categoria, target) {
+  return `<div class="drop" data-drop="${categoria}" data-target="${target}">
+    <input type="file" multiple data-input="${categoria}">
+    <strong>Arrastra archivos aquí</strong> o <u>haz clic para seleccionar</u>
+    <div class="hint">PDF, DWG, imágenes, ZIP… hasta 60 MB por archivo</div>
+  </div>`;
+}
+
+async function viewProyecto(id) {
+  const { proyecto: p } = await GET('/api/proyectos/' + id);
+  let propuestas = [];
+  if (p.es_dueno || state.user.role === 'admin') {
+    propuestas = (await GET(`/api/proyectos/${id}/propuestas`)).propuestas;
+  }
+  state.cache.proyecto = p;
+  const editable = p.estado === 'borrador';
+  const dias = diasRestantes(p.fecha_cierre);
+
+  const docsGrid = [['planos', p.doc_planos], ['eett', p.doc_eett], ['especialidades', p.doc_especialidades]]
+    .map(([k, v]) => `<div class="card" style="padding:13px;box-shadow:none">
+      <div class="row"><strong class="small">${esc(CATEGORIAS[k].label)}</strong>
+      <span class="spacer" style="margin-left:auto"></span>${badge(DOC_ESTADO, v || 'no')}</div>
+      <div class="hint">${p.archivos.filter(f => f.categoria === k).length} archivo(s)</div></div>`).join('');
+
+  const archivosSec = Object.keys(CATEGORIAS).map(cat => `
+    <div style="margin-bottom:18px">
+      <div class="row" style="margin-bottom:8px">
+        <strong>${esc(CATEGORIAS[cat].label)}</strong>
+        ${cat !== 'otros' ? badge(DOC_ESTADO, p[{ planos: 'doc_planos', eett: 'doc_eett', especialidades: 'doc_especialidades' }[cat]] || 'no') : ''}
+      </div>
+      ${fileList(p.archivos.filter(f => f.categoria === cat), p.estado !== 'adjudicado' && p.estado !== 'cerrado')}
+      ${p.estado === 'adjudicado' || p.estado === 'cerrado' ? '' : uploadZone(cat, 'proyecto/' + p.id)}
+    </div>`).join('');
+
+  const tablaPropuestas = !propuestas.length
+    ? `<div class="empty"><span class="ico">📨</span>
+        <h3>Aún no hay propuestas</h3>
+        <p class="muted">${p.estado === 'borrador'
+          ? 'Publica la licitación para que las constructoras certificadas puedan verla.'
+          : 'Las constructoras certificadas ya pueden ver tu proyecto y enviar propuestas.'}</p></div>`
+    : `<div class="table-wrap"><table>
+        <thead><tr><th>Constructora</th><th class="num">Monto</th><th class="num">Plazo</th>
+          <th>Validez</th><th>Adjuntos</th><th>Estado</th><th></th></tr></thead>
+        <tbody>${propuestas.map((pr, i) => `<tr class="${i === 0 && pr.estado === 'enviada' ? 'best' : ''}">
+          <td><a href="#" data-action="ver-propuesta" data-id="${pr.id}"><strong>${esc(pr.constructora.razon_social)}</strong></a>
+            <div class="fmeta">${pr.constructora.anos_experiencia || 0} años exp. · ${desde(pr.created_at)}</div></td>
+          <td class="num"><strong>${money(pr.monto, pr.moneda)}</strong>
+            <div class="fmeta">${pr.incluye_iva ? 'IVA incluido' : 'sin IVA'}</div></td>
+          <td class="num">${num(pr.plazo_dias, 'días')}</td>
+          <td>${num(pr.validez_dias, 'días')}</td>
+          <td>${pr.archivos.length}</td>
+          <td>${badge(ESTADO_PROPUESTA, pr.estado)}</td>
+          <td class="nowrap">
+            <button class="btn ghost sm" data-action="ver-propuesta" data-id="${pr.id}">Ver</button>
+            ${pr.estado === 'enviada' && p.estado === 'publicado' ? `
+              <button class="btn ok sm" data-action="adjudicar" data-id="${pr.id}">Adjudicar</button>
+              <button class="btn danger sm" data-action="rechazar" data-id="${pr.id}">Rechazar</button>` : ''}
+          </td></tr>`).join('')}</tbody></table></div>
+      ${propuestas.length > 1 ? `<p class="hint" style="margin-top:8px">Ordenadas por monto, de menor a mayor. La fila destacada es la más económica.</p>` : ''}`;
+
+  return `<div class="page-head">
+      <div>
+        <div class="row" style="gap:8px;margin-bottom:6px">${badge(ESTADO_PROYECTO, p.estado)}
+          ${p.estado === 'publicado' && dias !== null
+            ? `<span class="badge ${dias < 0 ? 'red' : dias <= 3 ? 'amber' : 'gray'}">${dias < 0 ? 'Plazo vencido' : 'Cierra en ' + dias + ' días'}</span>` : ''}</div>
+        <h1>${esc(p.titulo)}</h1>
+        <p>📍 ${esc(p.comuna || '—')}${p.region ? ', ' + esc(p.region) : ''} · ${esc(p.tipo_obra || 'Sin tipo')}</p>
+      </div>
+      <div class="spacer"></div>
+      <div class="row">
+        <a class="btn ghost" href="#/proyectos">← Volver</a>
+        ${editable ? `<button class="btn danger" data-action="eliminar-proyecto">Eliminar</button>
+          <button class="btn ghost" data-action="editar-proyecto">Editar ficha</button>
+          <button class="btn" data-action="publicar">Publicar licitación</button>` : ''}
+        ${p.estado === 'publicado' ? `<button class="btn ghost" data-action="cerrar">Cerrar licitación</button>` : ''}
+      </div>
+    </div>
+
+    ${editable ? `<div class="notice warn" style="margin-bottom:16px"><div>
+      <strong>Este proyecto está en borrador.</strong> Solo tú puedes verlo. Sube los antecedentes y
+      publícalo para que las constructoras certificadas envíen sus propuestas.</div></div>` : ''}
+    ${p.estado === 'adjudicado' ? `<div class="notice ok" style="margin-bottom:16px"><div>
+      <strong>Licitación adjudicada.</strong> La constructora seleccionada recibió la notificación y
+      tus datos de contacto.</div></div>` : ''}
+
+    <div class="grid two" style="align-items:start">
+      <div>
+        <div class="card">
+          <h2>Ficha del proyecto</h2>
+          <dl class="kv">
+            <dt>Tipo de obra</dt><dd>${esc(p.tipo_obra || '—')}</dd>
+            <dt>Modalidad</dt><dd>${esc(p.modalidad || '—')}</dd>
+            <dt>Dirección</dt><dd>${esc(p.direccion || '—')}</dd>
+            <dt>Superficie</dt><dd>${num(p.superficie_m2, 'm²')}</dd>
+            <dt>Presupuesto referencial</dt><dd>${money(p.presupuesto, p.moneda)}</dd>
+            <dt>Plazo estimado</dt><dd>${num(p.plazo_dias, 'días')}</dd>
+            <dt>Inicio estimado</dt><dd>${fecha(p.fecha_inicio)}</dd>
+            <dt>Cierre de licitación</dt><dd>${fecha(p.fecha_cierre)}</dd>
+          </dl>
+          <hr class="sep">
+          <h3>Descripción</h3>
+          <p class="muted" style="white-space:pre-wrap">${esc(p.descripcion || 'Sin descripción.')}</p>
+          ${p.especialidades.length ? `<hr class="sep"><h3>Especialidades involucradas</h3>
+            <div class="chips">${p.especialidades.map(e => `<span class="chip on">${esc(e)}</span>`).join('')}</div>` : ''}
+        </div>
+        <div class="card"><h2>Documentación declarada</h2>
+          <div class="stack" style="gap:8px">${docsGrid}</div></div>
+      </div>
+      <div>
+        <div class="card"><h2>Archivos del proyecto</h2>
+          <p class="muted small">Organiza los antecedentes por categoría. Las constructoras
+            certificadas podrán descargarlos una vez publicada la licitación.</p>
+          ${archivosSec}</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-head"><h2>Propuestas recibidas</h2>
+        <span class="spacer"></span><span class="badge blue">${propuestas.length}</span></div>
+      ${tablaPropuestas}
+    </div>`;
+}
+
+function mountProyecto(id) {
+  wireUploads(id);
+  const p = state.cache.proyecto;
+  document.addEventListener('click', proyectoClicks);
+  window.__cleanup = () => document.removeEventListener('click', proyectoClicks);
+
+  async function proyectoClicks(e) {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const action = btn.dataset.action;
+    if (action === 'publicar') {
+      e.preventDefault();
+      if (!await dialogo({ titulo: 'Publicar licitación',
+        mensaje: 'Las constructoras certificadas podrán ver la ficha, descargar los archivos y enviarte propuestas hasta la fecha de cierre.',
+        ok: 'Publicar' })) return;
+      submitting(btn, async () => {
+        await POST(`/api/proyectos/${id}/publicar`);
+        toast('Licitación publicada', 'ok'); render();
+      });
+    } else if (action === 'cerrar') {
+      e.preventDefault();
+      if (!await dialogo({ titulo: 'Cerrar licitación',
+        mensaje: 'Dejará de recibir propuestas y las que estén en evaluación quedarán rechazadas.',
+        ok: 'Cerrar licitación', tono: 'danger' })) return;
+      submitting(btn, async () => {
+        await POST(`/api/proyectos/${id}/cerrar`);
+        toast('Licitación cerrada'); render();
+      });
+    } else if (action === 'editar-proyecto') {
+      e.preventDefault();
+      modal(`<div class="card-head"><h2>Editar ficha</h2>
+        <span class="spacer"></span><button class="btn ghost sm" data-close-modal>✕</button></div>
+        ${projectForm(p)}`, () => mountProjectForm(p));
+    } else if (action === 'eliminar-proyecto') {
+      e.preventDefault();
+      if (!await dialogo({ titulo: 'Eliminar proyecto',
+        mensaje: 'Se borrará el borrador y todos los archivos que subiste. Esta acción no se puede deshacer.',
+        ok: 'Eliminar', tono: 'danger' })) return;
+      submitting(btn, async () => {
+        await DEL('/api/proyectos/' + id);
+        toast('Proyecto eliminado');
+        go('#/proyectos');
+      });
+    } else if (action === 'del-file') {
+      e.preventDefault();
+      if (!await dialogo({ titulo: '¿Eliminar este archivo?',
+        mensaje: 'Las constructoras dejarán de verlo en la ficha del proyecto.',
+        ok: 'Eliminar', tono: 'danger' })) return;
+      submitting(btn, async () => { await DEL('/api/archivos/' + btn.dataset.id); render(); });
+    } else if (action === 'adjudicar') {
+      e.preventDefault();
+      if (!await dialogo({ titulo: 'Adjudicar la obra',
+        mensaje: 'Se notificará a la constructora seleccionada y recibirá tus datos de contacto. Las demás propuestas quedarán rechazadas.',
+        ok: 'Adjudicar', tono: 'ok' })) return;
+      submitting(btn, async () => {
+        await POST(`/api/propuestas/${btn.dataset.id}/adjudicar`);
+        toast('Licitación adjudicada', 'ok'); render();
+      });
+    } else if (action === 'rechazar') {
+      e.preventDefault();
+      if (!await dialogo({ titulo: 'Rechazar propuesta',
+        mensaje: 'La constructora será notificada de que su propuesta no fue seleccionada.',
+        ok: 'Rechazar', tono: 'danger' })) return;
+      submitting(btn, async () => {
+        await POST(`/api/propuestas/${btn.dataset.id}/rechazar`);
+        toast('Propuesta rechazada'); render();
+      });
+    } else if (action === 'ver-propuesta') {
+      e.preventDefault();
+      const { propuestas } = await GET(`/api/proyectos/${id}/propuestas`);
+      const pr = propuestas.find(x => x.id === btn.dataset.id);
+      if (pr) modal(propuestaDetalle(pr));
+    }
+  }
+}
+
+function propuestaDetalle(pr) {
+  const c = pr.constructora;
+  return `<div class="card-head"><div>
+      <h2 style="margin:0">${esc(c.razon_social)}</h2>
+      <div class="row small muted" style="gap:8px">${badge(ESTADO_PROPUESTA, pr.estado)}
+        <span>${c.anos_experiencia || 0} años de experiencia</span></div></div>
+      <span class="spacer"></span><button class="btn ghost sm" data-close-modal>✕</button></div>
+    <dl class="kv">
+      <dt>Monto total</dt><dd><strong>${money(pr.monto, pr.moneda)}</strong> ${pr.incluye_iva ? '(IVA incluido)' : '(no incluye IVA)'}</dd>
+      <dt>Plazo de ejecución</dt><dd>${num(pr.plazo_dias, 'días corridos')}</dd>
+      <dt>Validez de la oferta</dt><dd>${num(pr.validez_dias, 'días')}</dd>
+      <dt>Forma de pago</dt><dd style="white-space:pre-wrap">${esc(pr.forma_pago || '—')}</dd>
+      <dt>Exclusiones</dt><dd style="white-space:pre-wrap">${esc(pr.exclusiones || '—')}</dd>
+      <dt>Observaciones</dt><dd style="white-space:pre-wrap">${esc(pr.observaciones || '—')}</dd>
+      <dt>Enviada</dt><dd>${fecha(pr.created_at)} (${desde(pr.created_at)})</dd>
+    </dl>
+    ${c.descripcion ? `<hr class="sep"><h3>Sobre la empresa</h3><p class="muted">${esc(c.descripcion)}</p>` : ''}
+    ${c.especialidades?.length ? `<div class="chips">${c.especialidades.map(e => `<span class="chip on">${esc(e)}</span>`).join('')}</div>` : ''}
+    ${c.email ? `<hr class="sep"><h3>Contacto</h3>
+      <p class="small">${esc(c.contacto || '')} · <a href="mailto:${esc(c.email)}">${esc(c.email)}</a>
+      ${c.telefono ? ' · ' + esc(c.telefono) : ''}${c.sitio_web ? ` · <a href="${esc(c.sitio_web)}" target="_blank" rel="noopener">sitio web</a>` : ''}</p>` : ''}
+    ${pr.archivos.length ? `<hr class="sep"><h3>Adjuntos de la propuesta</h3>${fileList(pr.archivos, false)}` : ''}`;
+}
+
+function wireUploads(projectId, proposalId) {
+  $$('[data-drop]').forEach(zone => {
+    const input = $('input[type=file]', zone);
+    zone.addEventListener('click', () => input.click());
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault(); zone.classList.remove('over');
+      upload(zone, e.dataTransfer.files);
+    });
+    input.addEventListener('change', () => upload(zone, input.files));
+  });
+
+  async function upload(zone, files) {
+    if (!files || !files.length) return;
+    const fd = new FormData();
+    fd.append('categoria', zone.dataset.drop);
+    Array.from(files).forEach(f => fd.append('archivos', f));
+    const original = zone.innerHTML;
+    zone.innerHTML = `<strong>Subiendo ${files.length} archivo(s)…</strong>`;
+    try {
+      const url = proposalId ? `/api/propuestas/${proposalId}/archivos`
+        : `/api/proyectos/${projectId}/archivos`;
+      const r = await POST(url, fd);
+      toast(`${r.archivos.length} archivo(s) subido(s)`, 'ok');
+      render();
+    } catch (err) {
+      toast(err.message, 'err');
+      zone.innerHTML = original;
+      wireUploads(projectId, proposalId);
+    }
+  }
+}
+
+/* ============================================================ CONSTRUCTORA */
+
+function certBanner(perfil) {
+  if (!perfil || perfil.cert_estado === 'certificada') return '';
+  const pendiente = perfil.cert_estado === 'pendiente';
+  return `<div class="notice ${pendiente ? 'warn' : 'err'}" style="margin-bottom:18px"><div>
+    <strong>${pendiente ? 'Tu certificación está en revisión.' : 'Tu certificación fue rechazada.'}</strong>
+    ${pendiente
+      ? ' Mientras tanto no puedes ver las licitaciones ni descargar archivos. Completa tu perfil para acelerar la revisión.'
+      : ' ' + esc(perfil.cert_notas || 'Puedes actualizar tus antecedentes y solicitar una nueva revisión.')}
+    <div style="margin-top:8px"><a class="btn sm ghost" href="#/perfil">Completar mi perfil</a></div>
+  </div></div>`;
+}
+
+async function viewMercado() {
+  const perfil = state.user.perfil || {};
+  if (state.user.role === 'constructora' && perfil.cert_estado !== 'certificada') {
+    return `<div class="page-head"><div><h1>Explorar licitaciones</h1></div></div>
+      ${certBanner(perfil)}
+      <div class="card empty"><span class="ico">🔒</span><h3>Acceso restringido</h3>
+        <p class="muted">Las licitaciones y sus archivos solo están disponibles para constructoras
+          certificadas. Te avisaremos apenas se apruebe tu solicitud.</p></div>`;
+  }
+  const q = new URLSearchParams(location.hash.split('?')[1] || '');
+  const qs = new URLSearchParams();
+  ['q', 'tipo', 'region', 'con_planos', 'abiertas'].forEach(k => { if (q.get(k)) qs.set(k, q.get(k)); });
+  const { proyectos } = await GET('/api/mercado?' + qs.toString());
+  const opt = (v, list) => list.map(o => `<option value="${esc(o)}" ${q.get(v) === o ? 'selected' : ''}>${esc(o)}</option>`).join('');
+
+  return `<div class="page-head">
+      <div><h1>Licitaciones disponibles</h1>
+        <p>Proyectos publicados por clientes. Descarga los antecedentes y envía tu propuesta.</p></div>
+      <div class="spacer"></div><span class="badge blue">${proyectos.length} proyecto(s)</span>
+    </div>
+    <div class="card" style="margin-bottom:18px">
+      <form id="form-filtros" class="grid four" style="align-items:end;gap:12px">
+        <label class="field" style="margin:0"><span class="lbl">Buscar</span>
+          <input type="text" name="q" value="${esc(q.get('q') || '')}" placeholder="Título, comuna…"></label>
+        <label class="field" style="margin:0"><span class="lbl">Tipo de obra</span>
+          <select name="tipo"><option value="">Todos</option>${opt('tipo', TIPOS_OBRA)}</select></label>
+        <label class="field" style="margin:0"><span class="lbl">Región</span>
+          <select name="region"><option value="">Todas</option>${opt('region', REGIONES)}</select></label>
+        <div>
+          <label class="check"><input type="checkbox" name="con_planos" value="1" ${q.get('con_planos') ? 'checked' : ''}>Solo con planos</label>
+          <label class="check"><input type="checkbox" name="abiertas" value="1" ${q.get('abiertas') ? 'checked' : ''}>Solo abiertas</label>
+        </div>
+        <div class="row" style="grid-column:1/-1">
+          <button class="btn sm" type="submit">Aplicar filtros</button>
+          <a class="btn ghost sm" href="#/mercado">Limpiar</a>
+        </div>
+      </form>
+    </div>
+    ${proyectos.length
+      ? `<div class="grid three">${proyectos.map(p => licitacionCard(p)).join('')}</div>`
+      : `<div class="card empty"><span class="ico">🔍</span><h3>No hay licitaciones que coincidan</h3>
+          <p class="muted">Ajusta los filtros o vuelve más tarde: se publican proyectos nuevos constantemente.</p></div>`}`;
+}
+
+function licitacionCard(p) {
+  const base = projectCard(p, '#/licitacion');
+  if (!p.mi_propuesta) return base;
+  return base.replace('</footer>',
+    `<span class="badge ${ESTADO_PROPUESTA[p.mi_propuesta.estado][0]}" style="margin-left:6px">Ya postulaste</span></footer>`);
+}
+
+function mountMercado() {
+  const form = $('#form-filtros');
+  if (!form) return;
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const d = formData(form);
+    const qs = new URLSearchParams();
+    Object.entries(d).forEach(([k, v]) => { if (v && v !== false) qs.set(k, v === true ? '1' : v); });
+    go('#/mercado?' + qs.toString());
+  });
+}
+
+async function viewLicitacion(id) {
+  const { proyecto: p } = await GET('/api/proyectos/' + id);
+  const mia = p.mi_propuesta;
+  state.cache.proyecto = p;
+  state.cache.miPropuesta = mia && mia.estado === 'enviada' ? mia.id : null;
+  const dias = diasRestantes(p.fecha_cierre);
+  const cerrada = p.estado !== 'publicado' || (dias !== null && dias < 0);
+
+  const archivos = Object.keys(CATEGORIAS).map(cat => {
+    const lista = p.archivos.filter(f => f.categoria === cat);
+    if (!lista.length) return '';
+    return `<div style="margin-bottom:16px"><strong style="font-size:.92rem">${esc(CATEGORIAS[cat].label)}</strong>
+      <div style="margin-top:8px">${fileList(lista, false)}</div></div>`;
+  }).join('') || '<p class="dim small">El cliente no ha subido archivos a esta licitación.</p>';
+
+  const formPropuesta = cerrada
+    ? `<div class="notice ${p.estado === 'adjudicado' ? 'ok' : 'warn'}"><div>${
+        p.estado === 'adjudicado' ? 'Esta licitación ya fue adjudicada.'
+        : p.estado === 'cerrado' ? 'Esta licitación fue cerrada por el cliente.'
+        : 'El plazo para enviar propuestas venció.'}</div></div>`
+    : `<form id="form-propuesta">
+        <div class="grid two">
+          <label class="field"><span class="lbl">Monto total *</span>
+            <input type="number" name="monto" min="0" step="0.01" required
+              value="${esc(mia?.monto ?? '')}"></label>
+          <label class="field"><span class="lbl">Moneda</span>
+            <select name="moneda">${['UF', 'CLP', 'USD'].map(m =>
+              `<option ${(mia?.moneda || p.moneda || 'UF') === m ? 'selected' : ''}>${m}</option>`).join('')}</select></label>
+        </div>
+        <label class="check"><input type="checkbox" name="incluye_iva" ${mia?.incluye_iva ? 'checked' : ''}> El monto incluye IVA</label>
+        <div class="grid two" style="margin-top:12px">
+          <label class="field"><span class="lbl">Plazo de ejecución (días)</span>
+            <input type="number" name="plazo_dias" min="0" value="${esc(mia?.plazo_dias ?? p.plazo_dias ?? '')}"></label>
+          <label class="field"><span class="lbl">Validez de la oferta (días)</span>
+            <input type="number" name="validez_dias" min="0" value="${esc(mia?.validez_dias ?? 30)}"></label>
+        </div>
+        <label class="field"><span class="lbl">Forma de pago propuesta</span>
+          <textarea name="forma_pago" style="min-height:70px" placeholder="Ej: anticipo 15%, estados de pago mensuales, retención 10%…">${esc(mia?.forma_pago || '')}</textarea></label>
+        <label class="field"><span class="lbl">Exclusiones</span>
+          <textarea name="exclusiones" style="min-height:70px" placeholder="Qué NO está incluido en el monto ofertado.">${esc(mia?.exclusiones || '')}</textarea></label>
+        <label class="field"><span class="lbl">Observaciones</span>
+          <textarea name="observaciones" placeholder="Metodología, equipo asignado, supuestos de la oferta…">${esc(mia?.observaciones || '')}</textarea></label>
+        <button class="btn block lg" type="submit">${mia && mia.estado === 'enviada' ? 'Actualizar propuesta' : 'Enviar propuesta'}</button>
+      </form>`;
+
+  return `<div class="page-head">
+      <div>
+        <div class="row" style="gap:8px;margin-bottom:6px">${badge(ESTADO_PROYECTO, p.estado)}
+          ${p.estado === 'publicado' && dias !== null
+            ? `<span class="badge ${dias < 0 ? 'red' : dias <= 3 ? 'amber' : 'gray'}">${dias < 0 ? 'Plazo vencido' : 'Cierra en ' + dias + ' días'}</span>` : ''}
+          ${mia ? badge(ESTADO_PROPUESTA, mia.estado) : ''}</div>
+        <h1>${esc(p.titulo)}</h1>
+        <p>📍 ${esc(p.comuna || '—')}${p.region ? ', ' + esc(p.region) : ''} · ${esc(p.tipo_obra || '')}
+          · Publicado por ${esc(p.cliente.nombre)}</p>
+      </div>
+      <div class="spacer"></div>
+      <a class="btn ghost" href="#/mercado">← Volver al listado</a>
+    </div>
+
+    ${mia && mia.estado === 'aceptada' ? `<div class="notice ok" style="margin-bottom:16px"><div>
+      <strong>¡Te adjudicaron esta obra!</strong> El cliente ya tiene tus datos de contacto.</div></div>` : ''}
+
+    <div class="grid two" style="align-items:start">
+      <div>
+        <div class="card"><h2>Antecedentes de la obra</h2>
+          <dl class="kv">
+            <dt>Tipo de obra</dt><dd>${esc(p.tipo_obra || '—')}</dd>
+            <dt>Modalidad</dt><dd>${esc(p.modalidad || '—')}</dd>
+            <dt>Ubicación</dt><dd>${esc(p.direccion || p.comuna || '—')}</dd>
+            <dt>Superficie</dt><dd>${num(p.superficie_m2, 'm²')}</dd>
+            <dt>Presupuesto referencial</dt><dd>${money(p.presupuesto, p.moneda)}</dd>
+            <dt>Plazo estimado</dt><dd>${num(p.plazo_dias, 'días')}</dd>
+            <dt>Inicio estimado</dt><dd>${fecha(p.fecha_inicio)}</dd>
+            <dt>Cierre de licitación</dt><dd><strong>${fecha(p.fecha_cierre)}</strong></dd>
+            <dt>Propuestas recibidas</dt><dd>${p.propuestas_count}</dd>
+          </dl>
+          <hr class="sep"><h3>Descripción</h3>
+          <p class="muted" style="white-space:pre-wrap">${esc(p.descripcion || '')}</p>
+          ${p.especialidades.length ? `<hr class="sep"><h3>Especialidades involucradas</h3>
+            <div class="chips">${p.especialidades.map(e => `<span class="chip on">${esc(e)}</span>`).join('')}</div>` : ''}
+          <hr class="sep">
+          <h3>Documentación declarada</h3>
+          <div class="row" style="gap:8px">
+            <span>Planos ${badge(DOC_ESTADO, p.doc_planos)}</span>
+            <span>EETT ${badge(DOC_ESTADO, p.doc_eett)}</span>
+            <span>Especialidades ${badge(DOC_ESTADO, p.doc_especialidades)}</span>
+          </div>
+        </div>
+        <div class="card"><h2>Archivos para descargar</h2>${archivos}</div>
+      </div>
+      <div>
+        <div class="card">
+          <h2>${mia && mia.estado === 'enviada' ? 'Tu propuesta' : 'Enviar propuesta'}</h2>
+          ${mia ? `<p class="muted small">Enviada ${desde(mia.created_at)} · ${badge(ESTADO_PROPUESTA, mia.estado)}</p>` : ''}
+          ${formPropuesta}
+        </div>
+        ${mia ? `<div class="card"><h2>Adjuntos de tu propuesta</h2>
+          ${fileList(mia.archivos, mia.estado === 'enviada')}
+          ${mia.estado === 'enviada' ? uploadZone('propuesta', 'propuesta/' + mia.id) : ''}
+          ${mia.estado === 'enviada' ? `<hr class="sep">
+            <button class="btn danger sm" data-action="retirar" data-id="${mia.id}">Retirar propuesta</button>` : ''}
+        </div>` : ''}
+      </div>
+    </div>`;
+}
+
+function mountLicitacion(id) {
+  const mia = state.cache.miPropuesta;
+  if (mia) wireUploads(null, mia);
+  const form = $('#form-propuesta');
+  if (form) form.addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = $('button[type=submit]', form);
+    submitting(btn, async () => {
+      const d = formData(form);
+      if (mia) await PATCH('/api/propuestas/' + mia, d);
+      else await POST(`/api/proyectos/${id}/propuestas`, d);
+      toast(mia ? 'Propuesta actualizada' : 'Propuesta enviada al cliente', 'ok');
+      render();
+    });
+  });
+  const retirar = $('[data-action=retirar]');
+  if (retirar) retirar.addEventListener('click', async () => {
+    if (!await dialogo({ titulo: 'Retirar propuesta',
+      mensaje: 'Tu oferta dejará de estar disponible para el cliente. Podrás volver a postular mientras la licitación siga abierta.',
+      ok: 'Retirar', tono: 'danger' })) return;
+    submitting(retirar, async () => {
+      await POST(`/api/propuestas/${retirar.dataset.id}/retirar`);
+      toast('Propuesta retirada'); render();
+    });
+  });
+}
+
+async function viewMisPropuestas() {
+  const perfil = state.user.perfil || {};
+  const { propuestas } = await GET('/api/propuestas');
+  const total = propuestas.length;
+  const ganadas = propuestas.filter(p => p.estado === 'aceptada').length;
+  const vigentes = propuestas.filter(p => p.estado === 'enviada').length;
+  return `<div class="page-head"><div><h1>Mis propuestas</h1>
+      <p>Seguimiento de todas las licitaciones en que has participado.</p></div></div>
+    ${certBanner(perfil)}
+    <div class="grid four" style="margin-bottom:18px">
+      <div class="stat"><b>${total}</b><span>Propuestas enviadas</span></div>
+      <div class="stat"><b>${vigentes}</b><span>En evaluación</span></div>
+      <div class="stat"><b>${ganadas}</b><span>Adjudicadas</span></div>
+      <div class="stat"><b>${total ? Math.round(ganadas / total * 100) : 0}%</b><span>Tasa de éxito</span></div>
+    </div>
+    ${!total ? `<div class="card empty"><span class="ico">📨</span><h3>Todavía no has licitado</h3>
+      <p class="muted">Explora las licitaciones disponibles y envía tu primera propuesta.</p>
+      <a class="btn" href="#/mercado">Explorar licitaciones</a></div>`
+      : `<div class="table-wrap"><table>
+        <thead><tr><th>Proyecto</th><th class="num">Monto ofertado</th><th class="num">Plazo</th>
+          <th>Enviada</th><th>Estado</th><th></th></tr></thead>
+        <tbody>${propuestas.map(pr => `<tr>
+          <td><a href="#/licitacion/${pr.project_id}"><strong>${esc(pr.proyecto?.titulo || '—')}</strong></a>
+            <div class="fmeta">${pr.archivos.length} adjunto(s)</div></td>
+          <td class="num">${money(pr.monto, pr.moneda)}</td>
+          <td class="num">${num(pr.plazo_dias, 'días')}</td>
+          <td>${fecha(pr.created_at)}</td>
+          <td>${badge(ESTADO_PROPUESTA, pr.estado)}</td>
+          <td><a class="btn ghost sm" href="#/licitacion/${pr.project_id}">Ver</a></td>
+        </tr>`).join('')}</tbody></table></div>`}`;
+}
+
+/* ============================================================ ADMIN */
+
+async function viewAdmin() {
+  const [{ resumen }, { constructoras }] = await Promise.all([
+    GET('/api/admin/resumen'), GET('/api/admin/constructoras')]);
+  const pendientes = constructoras.filter(c => c.cert_estado === 'pendiente');
+  const fila = c => `<tr>
+    <td><strong>${esc(c.razon_social)}</strong>
+      <div class="fmeta">${esc(c.rut || 's/RUT')} · ${esc(c.nombre)} · ${esc(c.email)}</div></td>
+    <td>${c.anos_experiencia || 0} años</td>
+    <td>${(c.especialidades || []).slice(0, 3).map(e => `<span class="badge gray">${esc(e)}</span>`).join(' ') || '—'}</td>
+    <td>${(c.regiones || []).join(', ') || '—'}</td>
+    <td>${c.propuestas}</td>
+    <td>${badge(ESTADO_CERT, c.cert_estado)}</td>
+    <td class="nowrap">
+      ${c.cert_estado !== 'certificada' ? `<button class="btn ok sm" data-cert="certificada" data-id="${c.user_id}">Certificar</button>` : ''}
+      ${c.cert_estado !== 'rechazada' ? `<button class="btn danger sm" data-cert="rechazada" data-id="${c.user_id}">Rechazar</button>` : ''}
+    </td></tr>`;
+
+  return `<div class="page-head"><div><h1>Panel de administración</h1>
+      <p>Certifica constructoras y supervisa la actividad del marketplace.</p></div></div>
+    <div class="grid four" style="margin-bottom:18px">
+      <div class="stat"><b>${resumen.clientes}</b><span>Clientes</span></div>
+      <div class="stat"><b>${resumen.constructoras}</b><span>Constructoras</span></div>
+      <div class="stat"><b>${resumen.publicados}</b><span>Licitaciones abiertas</span></div>
+      <div class="stat"><b>${resumen.propuestas}</b><span>Propuestas</span></div>
+    </div>
+    ${pendientes.length ? `<div class="notice warn" style="margin-bottom:16px"><div>
+      <strong>${pendientes.length} solicitud(es) de certificación pendiente(s).</strong>
+      Revisa los antecedentes antes de dar acceso a las licitaciones.</div></div>` : ''}
+    <div class="card"><div class="card-head"><h2>Constructoras registradas</h2>
+      <span class="spacer"></span><span class="badge blue">${constructoras.length}</span></div>
+      ${constructoras.length ? `<div class="table-wrap"><table>
+        <thead><tr><th>Empresa</th><th>Exp.</th><th>Rubros</th><th>Regiones</th><th>Prop.</th>
+          <th>Certificación</th><th></th></tr></thead>
+        <tbody>${constructoras.map(fila).join('')}</tbody></table></div>`
+        : '<div class="empty"><p class="muted">Aún no hay constructoras registradas.</p></div>'}
+    </div>`;
+}
+
+function mountAdmin() {
+  $$('[data-cert]').forEach(btn => btn.addEventListener('click', async () => {
+    const estado = btn.dataset.cert;
+    let notas = '';
+    if (estado === 'rechazada') {
+      notas = await dialogo({ titulo: 'Rechazar certificación',
+        mensaje: 'La empresa no podrá ver licitaciones ni descargar archivos.',
+        campo: 'Motivo del rechazo (lo verá la constructora)', ok: 'Rechazar', tono: 'danger' });
+      if (notas === null) return;
+    } else if (!await dialogo({ titulo: 'Certificar constructora',
+      mensaje: 'Tendrá acceso a todas las licitaciones publicadas y podrá descargar los antecedentes de cada proyecto.',
+      ok: 'Certificar', tono: 'ok' })) return;
+    submitting(btn, async () => {
+      await POST(`/api/admin/constructoras/${btn.dataset.id}/certificacion`, { estado, notas });
+      toast(estado === 'certificada' ? 'Constructora certificada' : 'Solicitud rechazada', 'ok');
+      render();
+    });
+  }));
+}
+
+/* ============================================================ PERFIL / NOTIFS */
+
+function viewPerfil() {
+  const u = state.user, p = u.perfil || {};
+  const comunes = `<div class="grid two">
+      <label class="field"><span class="lbl">Nombre de contacto</span>
+        <input type="text" name="nombre" value="${esc(u.nombre)}"></label>
+      <label class="field"><span class="lbl">Teléfono</span>
+        <input type="tel" name="telefono" value="${esc(u.telefono || '')}"></label>
+    </div>
+    <p class="hint">Correo de la cuenta: <strong>${esc(u.email)}</strong></p>`;
+
+  const cliente = `<hr class="sep"><div class="grid two">
+      <label class="field"><span class="lbl">Tipo de cliente</span>
+        <select name="tipo">
+          <option value="persona" ${p.tipo === 'persona' ? 'selected' : ''}>Persona natural</option>
+          <option value="empresa" ${p.tipo === 'empresa' ? 'selected' : ''}>Empresa / inmobiliaria</option>
+        </select></label>
+      <label class="field"><span class="lbl">RUT</span>
+        <input type="text" name="rut" value="${esc(p.rut || '')}"></label>
+    </div>
+    <label class="field"><span class="lbl">Empresa</span>
+      <input type="text" name="empresa" value="${esc(p.empresa || '')}"></label>`;
+
+  const constructora = `<hr class="sep">
+    <div class="grid two">
+      <label class="field"><span class="lbl">Razón social</span>
+        <input type="text" name="razon_social" value="${esc(p.razon_social || '')}"></label>
+      <label class="field"><span class="lbl">RUT empresa</span>
+        <input type="text" name="rut" value="${esc(p.rut || '')}"></label>
+    </div>
+    <div class="grid two">
+      <label class="field"><span class="lbl">Años de experiencia</span>
+        <input type="number" name="anos_experiencia" min="0" value="${esc(p.anos_experiencia || 0)}"></label>
+      <label class="field"><span class="lbl">Registro / certificaciones</span>
+        <input type="text" name="registro_mop" value="${esc(p.registro_mop || '')}"></label>
+    </div>
+    <fieldset><legend>Rubros</legend><div class="chips">${RUBROS.map(r =>
+      `<label class="chip"><input type="checkbox" name="especialidades" data-multi="1" value="${esc(r)}"
+        ${(p.especialidades || []).includes(r) ? 'checked' : ''}>${esc(r)}</label>`).join('')}</div></fieldset>
+    <fieldset style="margin-top:14px"><legend>Regiones donde operan</legend><div class="chips">${REGIONES.map(r =>
+      `<label class="chip"><input type="checkbox" name="regiones" data-multi="1" value="${esc(r)}"
+        ${(p.regiones || []).includes(r) ? 'checked' : ''}>${esc(r)}</label>`).join('')}</div></fieldset>
+    <label class="field" style="margin-top:14px"><span class="lbl">Sitio web</span>
+      <input type="url" name="sitio_web" value="${esc(p.sitio_web || '')}"></label>
+    <label class="field"><span class="lbl">Descripción de la empresa</span>
+      <textarea name="descripcion">${esc(p.descripcion || '')}</textarea></label>`;
+
+  return `<div class="page-head"><div><h1>Mi perfil</h1>
+      <p>${u.role === 'constructora' ? 'Mientras más completo tu perfil, más rápida es la certificación.'
+        : 'Tus datos de contacto para las constructoras que te adjudiquen.'}</p></div></div>
+    <div class="narrow">
+      ${u.role === 'constructora' ? `<div class="card" style="margin-bottom:16px">
+        <div class="row"><strong>Estado de certificación</strong>
+          <span class="spacer" style="margin-left:auto"></span>${badge(ESTADO_CERT, p.cert_estado)}</div>
+        ${p.cert_notas ? `<p class="hint" style="margin-top:6px">Nota del revisor: ${esc(p.cert_notas)}</p>` : ''}
+      </div>` : ''}
+      <div class="card"><form id="form-perfil">
+        ${comunes}
+        ${u.role === 'cliente' ? cliente : u.role === 'constructora' ? constructora : ''}
+        <button class="btn" type="submit" style="margin-top:16px">Guardar cambios</button>
+      </form></div>
+    </div>`;
+}
+
+function mountPerfil() {
+  wireChips();
+  $('#form-perfil').addEventListener('submit', e => {
+    e.preventDefault();
+    const btn = $('button[type=submit]', e.target);
+    submitting(btn, async () => {
+      const { user } = await PATCH('/api/perfil', formData(e.target));
+      state.user = user;
+      toast('Perfil actualizado', 'ok');
+      renderNav();
+    });
+  });
+}
+
+async function viewNotificaciones() {
+  const { notificaciones } = await GET('/api/notificaciones');
+  await POST('/api/notificaciones/leidas');
+  state.notifs = 0; renderNav();
+  return `<div class="page-head"><div><h1>Notificaciones</h1>
+      <p>Actividad reciente de tus proyectos y propuestas.</p></div></div>
+    <div class="narrow">${notificaciones.length ? notificaciones.map(n => `
+      <div class="card" style="padding:14px;margin-bottom:10px">
+        <div class="row"><span>${esc(n.mensaje)}</span>
+          <span class="spacer" style="margin-left:auto"></span>
+          <span class="small dim nowrap">${desde(n.created_at)}</span></div>
+        ${n.project_id ? `<a class="small" href="#/${state.user.role === 'constructora' ? 'licitacion' : 'proyecto'}/${n.project_id}">Ver proyecto →</a>` : ''}
+      </div>`).join('')
+      : '<div class="card empty"><span class="ico">🔔</span><p class="muted">No tienes notificaciones.</p></div>'}
+    </div>`;
+}
+
+/* ============================================================ ROUTER */
+
+const ROUTES = [
+  [/^#?\/?$/, () => state.user ? redirectHome() : viewLanding()],
+  [/^#\/como-funciona$/, viewLanding],
+  [/^#\/ingresar/, viewLogin, mountLogin, true],
+  [/^#\/registro/, viewRegistro, mountRegistro, true],
+  [/^#\/proyectos\/nuevo$/, viewNuevoProyecto, () => mountProjectForm(null)],
+  [/^#\/proyectos/, viewMisProyectos],
+  [/^#\/proyecto\/([0-9a-f]{32})$/, viewProyecto, mountProyecto],
+  [/^#\/mercado/, viewMercado, mountMercado],
+  [/^#\/licitacion\/([0-9a-f]{32})$/, viewLicitacion, mountLicitacion],
+  [/^#\/propuestas/, viewMisPropuestas],
+  [/^#\/admin/, viewAdmin, mountAdmin],
+  [/^#\/perfil$/, viewPerfil, mountPerfil],
+  [/^#\/notificaciones$/, viewNotificaciones]
+];
+
+function redirectHome() {
+  const home = { cliente: '#/proyectos', constructora: '#/mercado', admin: '#/admin' }[state.user.role];
+  go(home); return '';
+}
+
+async function render() {
+  if (window.__cleanup) { window.__cleanup(); window.__cleanup = null; }
+  const hash = location.hash || '#/';
+  const path = hash.split('?')[0];
+  const app = $('#app');
+  renderNav();
+
+  const match = ROUTES.find(r => r[0].test(path));
+  if (!match) { app.innerHTML = notFound(); return; }
+  const [re, view, mount, publica] = match;
+  if (!state.user && !publica && !/^#?\/?$/.test(path) && path !== '#/como-funciona') {
+    toast('Inicia sesión para continuar');
+    go('#/ingresar'); return;
+  }
+  const params = (path.match(re) || []).slice(1);
+
+  app.innerHTML = '<div class="loading">Cargando…</div>';
+  try {
+    const html = await view(...params);
+    if (html === '') return;                 // redirección en curso
+    app.innerHTML = html;
+    if (mount) mount(...params);
+  } catch (err) {
+    if (err.status === 401) { state.user = null; renderNav(); go('#/ingresar'); return; }
+    app.innerHTML = `<div class="card empty"><span class="ico">⚠️</span>
+      <h3>No se pudo cargar esta página</h3><p class="muted">${esc(err.message)}</p>
+      <a class="btn ghost" href="#/">Volver al inicio</a></div>`;
+  }
+}
+
+function notFound() {
+  return `<div class="card empty"><span class="ico">🧭</span><h3>Página no encontrada</h3>
+    <a class="btn ghost" href="#/">Volver al inicio</a></div>`;
+}
+
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-action=logout]');
+  if (!btn) return;
+  e.preventDefault();
+  submitting(btn, async () => {
+    await POST('/api/auth/logout');
+    state.user = null; state.notifs = 0;
+    go('#/'); render();
+    toast('Sesión cerrada');
+  });
+});
+
+window.addEventListener('hashchange', render);
+
+(async function boot() {
+  try {
+    const data = await GET('/api/auth/me');
+    state.user = data.user;
+    state.notifs = data.notificaciones || 0;
+  } catch (e) { state.user = null; }
+  render();
+})();
+
+
+/* ---------------------------------------------------------- barra de la demo */
+document.addEventListener('click', async e => {
+  const b = e.target.closest('#demo-bar [data-demo]');
+  if (!b) return;
+  const cual = b.dataset.demo;
+  if (cual === 'reset') {
+    if (await dialogo({ titulo: 'Reiniciar la demostración',
+      mensaje: 'Se borrarán los proyectos, propuestas y cuentas que hayas creado aquí, y todo vuelve al ejemplo inicial.',
+      ok: 'Reiniciar', tono: 'danger' })) reiniciarDemo();
+    return;
+  }
+  const correo = { cliente: 'cliente@demo.cl', constructora: 'constructora@demo.cl',
+                   admin: 'admin@obrum.cl' }[cual];
+  const u = D.users.find(x => x.email === correo);
+  if (!u) return;
+  D.sesion = u.id; guardar();
+  state.user = null;
+  const data = await GET('/api/auth/me');
+  state.user = data.user; state.notifs = data.notificaciones || 0;
+  toast('Entraste como ' + ({ cliente: 'cliente', constructora: 'constructora',
+                              admin: 'administrador' }[cual]), 'ok');
+  go({ cliente: '#/proyectos', constructora: '#/mercado', admin: '#/admin' }[cual]);
+  render();
+});
+
+/* ---------------------------------------------------------- vista previa de archivos */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-action=ver-archivo]');
+  if (!b) return;
+  e.preventDefault();
+  const f = D.files.find(x => x.id === b.dataset.id);
+  if (!f) return;
+  const guardado = memFiles.get(f.id);
+  let cuerpo;
+  if (guardado && guardado.texto) {
+    cuerpo = `<pre style="white-space:pre-wrap;background:var(--surface-2);border:1px solid var(--line);
+      border-radius:8px;padding:12px;font-size:.82rem;overflow:auto;max-height:320px">${esc(guardado.texto)}</pre>`;
+  } else if (guardado && guardado.url && /^image\//.test(f.mime || '')) {
+    cuerpo = `<img src="${guardado.url}" alt="" style="max-width:100%;border-radius:8px;border:1px solid var(--line)">`;
+  } else if (guardado && guardado.url && /pdf/.test(f.mime || '')) {
+    cuerpo = `<embed src="${guardado.url}" type="application/pdf" style="width:100%;height:420px;
+      border:1px solid var(--line);border-radius:8px">`;
+  } else {
+    cuerpo = `<p class="muted">Este archivo no se puede previsualizar aquí: la demo solo guarda
+      en memoria archivos de hasta 3 MB, y los formatos de plano (DWG, RVT) necesitan un programa
+      de escritorio.</p>`;
+  }
+  modal(`<div class="card-head"><div>
+      <h2 style="margin:0">${esc(f.nombre)}</h2>
+      <div class="small muted">${peso(f.size)} · ${esc(f.mime || 'archivo')}</div></div>
+      <span class="spacer" style="margin-left:auto"></span>
+      <button class="btn ghost sm" data-close-modal>✕</button></div>
+    ${cuerpo}
+    <div class="notice info" style="margin-top:14px"><div>En la plataforma real este botón
+      <strong>descarga el archivo</strong> a tu computador. En esta demostración se muestra aquí,
+      porque no hay servidor detrás.</div></div>`);
+});
+
+</script>
