@@ -33,7 +33,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--sans);
   font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
-.wrap { max-width: 1060px; margin: 0 auto; padding-left: 22px; padding-right: 22px; }
+.wrap { max-width: 1400px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
 a { color: var(--accent-2); }
 h1,h2,h3 { font-family: var(--display); margin: 0; letter-spacing: -.02em; text-wrap: balance; }
 
@@ -57,14 +57,14 @@ header { padding-block: 20px; border-bottom: 1px solid var(--line); background: 
   text-transform: uppercase; color: var(--accent-2); background: var(--accent-soft);
   padding: 5px 13px; border-radius: 99px; margin-bottom: 18px; }
 .hero h1 { font-size: clamp(2.3rem, 6.6vw, 4.4rem); font-weight: 800; line-height: 1.02; max-width: 26ch; }
-/* Desde tablet hacia arriba el titular va en UNA sola línea, de borde a borde de la pantalla.
-   El texto completo mide 24.75em; dividimos por 26.5 para dejar margen por si la tipografía
-   de respaldo del sistema es más ancha que la medida. */
+/* Desde tablet hacia arriba el titular va en UNA sola línea, ocupando el ancho completo de
+   la columna. El texto entero mide 24.75em (medido en el navegador con la tipografía real);
+   se divide por 26.5 para dejar un 7% de margen por si carga una tipografía de respaldo más
+   ancha que Archivo. Al medirse contra la misma columna que el resto de la página, el
+   titular, la bajada, los botones y las secciones de abajo comparten el borde izquierdo. */
 @media (min-width: 760px) {
   .hero h1 { max-width: none; white-space: nowrap; text-wrap: nowrap;
-    font-size: calc((100vw - 48px) / 26.5);
-    margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);
-    padding-left: 24px; padding-right: 24px; }
+    font-size: calc((min(100vw, 1400px) - 48px) / 26.5); }
 }
 .hero p { font-size: 1.1rem; color: var(--ink-2); max-width: 58ch; margin: 18px 0 0; }
 .acciones { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
