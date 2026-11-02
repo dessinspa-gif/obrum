@@ -57,6 +57,14 @@ header { padding-block: 20px; border-bottom: 1px solid var(--line); background: 
   text-transform: uppercase; color: var(--accent-2); background: var(--accent-soft);
   padding: 5px 13px; border-radius: 99px; margin-bottom: 18px; }
 .hero h1 { font-size: clamp(2.3rem, 6.6vw, 4.4rem); font-weight: 800; line-height: 1.02; max-width: 26ch; }
+.hero p { font-size: 1.1rem; color: var(--ink-2); max-width: 58ch; margin: 18px 0 0; }
+.acciones { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+
+.estado { display: flex; align-items: center; gap: 10px; margin-top: 30px; font-size: .9rem;
+  color: var(--ok); background: var(--ok-soft); border-radius: 9px; padding: 11px 15px;
+  border: 1px solid color-mix(in srgb, var(--ok) 22%, transparent); max-width: 60ch; }
+.punto { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex: none; }
+
 /* Desde tablet hacia arriba el titular va en UNA sola línea, ocupando el ancho completo de
    la columna. El texto entero mide 24.75em (medido en el navegador con la tipografía real);
    se divide por 26.5 para dejar un 7% de margen por si carga una tipografía de respaldo más
@@ -65,14 +73,14 @@ header { padding-block: 20px; border-bottom: 1px solid var(--line); background: 
 @media (min-width: 760px) {
   .hero h1 { max-width: none; white-space: nowrap; text-wrap: nowrap;
     font-size: calc((min(100vw, 1400px) - 48px) / 26.5); }
+  /* La bajada y el aviso acompañan al titular: mismo ancho y borde derecho parejo.
+     Justificado con partición de palabras (la página declara lang="es"), si no el
+     justificado abre huecos feos entre palabras. Se sube el cuerpo porque una línea
+     de 1100px con letra de 1.1rem queda demasiado larga para leer. */
+  .hero p { max-width: none; font-size: clamp(1.15rem, 1.45vw, 1.5rem);
+    text-align: justify; text-wrap: auto; hyphens: auto; }
+  .estado { max-width: none; }
 }
-.hero p { font-size: 1.1rem; color: var(--ink-2); max-width: 58ch; margin: 18px 0 0; }
-.acciones { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
-
-.estado { display: flex; align-items: center; gap: 10px; margin-top: 30px; font-size: .9rem;
-  color: var(--ok); background: var(--ok-soft); border-radius: 9px; padding: 11px 15px;
-  border: 1px solid color-mix(in srgb, var(--ok) 22%, transparent); max-width: 60ch; }
-.punto { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex: none; }
 
 section { padding-block: 44px; }
 .titulo-sec { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
