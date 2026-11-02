@@ -57,6 +57,15 @@ header { padding-block: 20px; border-bottom: 1px solid var(--line); background: 
   text-transform: uppercase; color: var(--accent-2); background: var(--accent-soft);
   padding: 5px 13px; border-radius: 99px; margin-bottom: 18px; }
 .hero h1 { font-size: clamp(2.3rem, 6.6vw, 4.4rem); font-weight: 800; line-height: 1.02; max-width: 26ch; }
+/* Desde tablet hacia arriba el titular va en UNA sola línea, de borde a borde de la pantalla.
+   El texto completo mide 24.75em; dividimos por 26.5 para dejar margen por si la tipografía
+   de respaldo del sistema es más ancha que la medida. */
+@media (min-width: 760px) {
+  .hero h1 { max-width: none; white-space: nowrap; text-wrap: nowrap;
+    font-size: calc((100vw - 48px) / 26.5);
+    margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);
+    padding-left: 24px; padding-right: 24px; }
+}
 .hero p { font-size: 1.1rem; color: var(--ink-2); max-width: 58ch; margin: 18px 0 0; }
 .acciones { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
 
