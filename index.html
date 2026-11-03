@@ -6,6 +6,10 @@
 <title>OBRUM · Licita tu obra con constructoras certificadas</title>
 <meta name="description" content="Marketplace que conecta clientes con constructoras certificadas. Publica tu proyecto con planos y EETT, recibe propuestas y adjudica.">
 <link rel="icon" type="image/svg+xml" href="logo.svg">
+<!-- La plataforma vive en app.obrum.cl. Esa dirección aparece en los cuatro botones de este
+     archivo; si cambia el dominio, hay que cambiarla en los cuatro. Mientras el servidor no esté
+     montado los botones no llevan a ninguna parte: por eso el aviso de la portada dice que la
+     plataforma abre en las próximas semanas. -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
 :root {
@@ -125,7 +129,7 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; color: var(--in
   <div class="wrap nav">
     <a class="marca" href="/"><img src="logo.svg" alt=""> OBRUM</a>
     <span class="sep"></span>
-    <a class="btn sm" href="demo.html">Ver la demo</a>
+    <a class="btn sm" href="https://app.obrum.cl/#/registro">Crear cuenta</a>
   </div>
 </header>
 
@@ -138,11 +142,12 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; color: var(--in
         especialidades. Las constructoras certificadas revisan los antecedentes, descargan los
         archivos y te envían su propuesta. Tú comparas montos, plazos y exclusiones, y adjudicas.</p>
       <div class="acciones">
-        <a class="btn" href="demo.html">Probar la demo</a>
+        <a class="btn" href="https://app.obrum.cl/#/registro?rol=cliente">Publicar mi proyecto</a>
         <a class="btn ghost" href="#constructoras">Soy constructora</a>
       </div>
       <div class="estado"><span class="punto"></span>
-        <span>En desarrollo. Estamos incorporando las primeras constructoras al registro.</span></div>
+        <span>En desarrollo: estamos incorporando las primeras constructoras al registro.
+          La plataforma abre en las próximas semanas.</span></div>
     </section>
 
     <section>
@@ -154,6 +159,7 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; color: var(--in
           <span class="quien">Si tienes una obra</span>
           <h3>Publicas y recibes propuestas</h3>
           <ol>
+            <li><strong>Creas tu cuenta</strong> y completas tus datos de contacto.</li>
             <li><strong>Creas el proyecto</strong> con ubicación, superficie, plazo, modalidad de
               contrato y presupuesto referencial.</li>
             <li><strong>Declaras qué documentación tienes</strong>: planos de arquitectura, EETT y
@@ -167,13 +173,17 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; color: var(--in
           <span class="quien">Si eres constructora</span>
           <h3>Exploras, descargas y licitas</h3>
           <ol>
-            <li><strong>Te registras</strong> con tu razón social, experiencia, rubros y regiones.</li>
+            <li><strong>Creas tu cuenta</strong> con tu correo. Toma un minuto.</li>
+            <li><strong>Completas el perfil</strong> de la empresa: razón social, experiencia,
+              rubros y regiones donde operan.</li>
             <li><strong>Te certificamos</strong>: validamos tus antecedentes antes de darte acceso.</li>
             <li><strong>Exploras licitaciones</strong> filtrando por tipo de obra, región y documentación
               disponible.</li>
             <li><strong>Descargas planos y EETT</strong> desde la ficha de cada proyecto.</li>
             <li><strong>Envías tu propuesta</strong> con monto, plazo, validez y adjuntos.</li>
           </ol>
+          <a class="btn ghost" href="https://app.obrum.cl/#/registro?rol=constructora"
+             style="margin-top:4px">Registrar mi constructora</a>
         </div>
       </div>
     </section>
@@ -195,12 +205,12 @@ footer { border-top: 1px solid var(--line); padding-block: 26px; color: var(--in
     <section>
       <div class="cierre">
         <div>
-          <h2>Mira la plataforma funcionando</h2>
-          <p>Una demostración navegable: crea un proyecto, cámbiate a constructora, envía una
-            propuesta y adjudícala. Todo ocurre en tu navegador.</p>
+          <h2>Empieza por tu primer proyecto</h2>
+          <p>Crea tu cuenta, carga los antecedentes de la obra y publícala. Las constructoras
+            certificadas revisan y te envían su propuesta.</p>
         </div>
         <span class="sep"></span>
-        <a class="btn" href="demo.html">Abrir la demo</a>
+        <a class="btn" href="https://app.obrum.cl/#/registro">Crear mi cuenta</a>
       </div>
     </section>
   </div>
